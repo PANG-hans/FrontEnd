@@ -302,12 +302,7 @@ export default {
     updateClick () {
       if (
         !this.form.name ||
-        !this.form.school ||
-        !this.form.course ||
-        !this.form.classes ||
         !this.form.number ||
-        !this.form.realname ||
-        !this.form.qq ||
         !this.form.email ||
         !this.form.type ||
         !this.form.username
