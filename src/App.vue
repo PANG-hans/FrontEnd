@@ -16,9 +16,9 @@
       <el-menu-item index="/statue">
         <i class="el-icon-tickets"></i>Status
       </el-menu-item>
-      <el-menu-item index="/contest">
+      <!--<el-menu-item index="/contest">
         <i class="el-icon-bell"></i>Contest
-      </el-menu-item>
+      </el-menu-item>-->
       <!-- <el-menu-item index="/rank">
         <i class="el-icon-star-on"></i>Rank
       </el-menu-item>
@@ -47,7 +47,7 @@
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="home">Home</el-dropdown-item>
           <el-dropdown-item command="submittion">Submittion</el-dropdown-item>
-          <el-dropdown-item command="setting">Setting</el-dropdown-item><!-- 
+          <el-dropdown-item command="setting">Setting</el-dropdown-item><!--
           <el-dropdown-item command="classes" divided>Class</el-dropdown-item> -->
           <el-dropdown-item command="admin"
                             divided

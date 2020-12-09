@@ -6,34 +6,34 @@
           <el-row :gutter="18"
                   id="title">{{this.proid+" "}}{{title}}</el-row>
           <br>
-          <el-row :gutter="18"
-                  id="des">Description</el-row>
-          <el-row :gutter="18"
+          <!--<el-row :gutter="18"
+                  id="des">Description</el-row>-->
+          <!--<el-row :gutter="18"
                   id="detail">
             <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
                  v-html="des"
                  :key="des"></div>
-          </el-row>
+          </el-row>-->
 
           <img :src="'data:image/jpeg;base64,'+imgcode"
                class="img-responsive" v-if="imgcode!=''">
 
-          <el-row :gutter="18"
+         <!-- <el-row :gutter="18"
                   id="des">Input</el-row>
           <el-row :gutter="18"
                   id="detail">
             <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
                  v-html="input"></div>
-          </el-row>
-          <el-row :gutter="18"
+          </el-row>-->
+          <!--<el-row :gutter="18"
                   id="des">Output</el-row>
           <el-row :gutter="18"
                   id="detail">
             <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
                  v-html="output"></div>
-          </el-row>
+          </el-row>-->
 
-          <el-row :gutter="18"
+          <!--<el-row :gutter="18"
                   style="left:10px">
             <el-row :gutter="18"
                     v-for="(item,index) in sinput.length"
@@ -62,7 +62,7 @@
                         style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
               </el-col>
             </el-row>
-          </el-row>
+          </el-row>-->
 
           <!-- <el-row :gutter="18"
                   id="des">Source</el-row> -->
@@ -71,12 +71,11 @@
             <div style="margin-right:50px;">{{source}}</div>
           </el-row> -->
           <el-row :gutter="18"
-                  id="des">Hint</el-row>
+                  id="des">Desciption</el-row>
           <el-row :gutter="18"
                   id="detail">
             <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                 v-html="hint"></div>
-          </el-row>
+                 v-html="input"></div></el-row>
         </el-card>
       </el-row>
       <el-row>
