@@ -18,19 +18,8 @@
               size="small">
       <el-table-column prop="username"
                        label="用户名"></el-table-column>
-      <el-table-column prop="name"
-                       label="昵称"></el-table-column>
-      <el-table-column prop="school"
-                       label="学校"></el-table-column>
-      <el-table-column prop="course"
-                       label="专业"></el-table-column>
-      <el-table-column prop="classes"
-                       label="班级"></el-table-column>
       <el-table-column prop="number"
                        label="学号"></el-table-column>
-      <el-table-column prop="realname"
-                       label="真实姓名"
-                       width="80"></el-table-column>
       <el-table-column prop="email"
                        label="邮箱"></el-table-column>
       <el-table-column prop="type"
@@ -103,15 +92,6 @@
 
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">昵称</div>
-        </el-col>
-        <el-col :span="12">
-          <el-input v-model="form.name"
-                    autocomplete="off"></el-input>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="3">
           <div style="text-align:center;margin:5px;">密码</div>
         </el-col>
         <el-col :span="12">
@@ -134,55 +114,10 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">学校</div>
-        </el-col>
-        <el-col :span="12">
-          <el-input v-model="form.school"
-                    autocomplete="off"></el-input>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="3">
-          <div style="text-align:center;margin:5px;">专业</div>
-        </el-col>
-        <el-col :span="12">
-          <el-input v-model="form.course"
-                    autocomplete="off"></el-input>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="3">
-          <div style="text-align:center;margin:5px;">班级</div>
-        </el-col>
-        <el-col :span="12">
-          <el-input v-model="form.classes"
-                    autocomplete="off"></el-input>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="3">
           <div style="text-align:center;margin:5px;">学号</div>
         </el-col>
         <el-col :span="12">
           <el-input v-model="form.number"
-                    autocomplete="off"></el-input>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="3">
-          <div style="text-align:center;margin:5px;">真实姓名</div>
-        </el-col>
-        <el-col :span="12">
-          <el-input v-model="form.realname"
-                    autocomplete="off"></el-input>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="3">
-          <div style="text-align:center;margin:5px;">QQ</div>
-        </el-col>
-        <el-col :span="12">
-          <el-input v-model="form.qq"
                     autocomplete="off"></el-input>
         </el-col>
       </el-row>
@@ -241,13 +176,7 @@ export default {
 
       form: {
         username: "",
-        name: "",
-        school: "",
-        course: "",
-        classes: "",
         number: "",
-        realname: "",
-        qq: "",
         email: "",
         type: 1
       },
