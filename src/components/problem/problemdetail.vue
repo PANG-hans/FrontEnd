@@ -131,14 +131,14 @@
               </template>
               <div>{{author}}</div>
             </el-collapse-item> -->
-            <el-collapse-item name="2"
+            <!--<el-collapse-item name="2"
                               id="des">
               <template slot="title">
                 <font color="deepskyblue"
                       size="4">Date:</font>
               </template>
               <div>{{addtime}}</div>
-            </el-collapse-item>
+            </el-collapse-item>-->
             <!-- <el-collapse-item name="3"
                               id="des">
               <template slot="title">
@@ -163,7 +163,7 @@
               </template>
               <div>{{memory}}</div>
             </el-collapse-item>
-            <el-collapse-item name="7"
+            <!--<el-collapse-item name="7"
                               id="des">
               <template slot="title">
                 <font color="deepskyblue"
@@ -173,7 +173,7 @@
                       :type="problemlevel(level)"
                       disable-transitions
                       hit>{{ level }}</el-tag>
-            </el-collapse-item>
+            </el-collapse-item>-->
             <el-collapse-item name="6"
                               id="des">
               <template slot="title">
@@ -346,14 +346,14 @@ export default {
         this.$axios
           .get("/problemdata/" + this.ID + "/")
           .then(response => {
-            if (response.data["level"] == "1") response.data["level"] = "Easy";
+            /*if (response.data["level"] == "1") response.data["level"] = "Easy";
             if (response.data["level"] == "2")
               response.data["level"] = "Medium";
             if (response.data["level"] == "3") response.data["level"] = "Hard";
             if (response.data["level"] == "4")
               response.data["level"] = "VeryHard";
             if (response.data["level"] == "5")
-              response.data["level"] = "ExtremelyHard";
+              response.data["level"] = "ExtremelyHard";*/
 
             if (response.data["tag"] == null) response.data["tag"] = ["无"];
             else response.data["tag"] = response.data["tag"].split("|");
@@ -401,7 +401,9 @@ export default {
             }
 
             this.title = response.data.title;
+/*
             this.level = response.data.level;
+*/
             this.tagnames = response.data.tag;
             this.$refs.prosta.setdata(this.$data)
             console.log(this.$refs["Statusmini"])
@@ -464,10 +466,10 @@ export default {
       if (type == "ExtremelyHard") return "danger";
     },
     submit: function () {
-      if (this.addtime == "") {
+      /*if (this.addtime == "") {
         this.$message.error("非法操作！");
         return;
-      }
+      }*/
       if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;

@@ -113,7 +113,7 @@ export default {
   data () {
     return {
       activeIndex: "1",
-      school: "LPOJ",
+      school: "SUSTech",
       loginshow: sessionStorage.username,
       username: sessionStorage.username,
       name: sessionStorage.name,
@@ -124,20 +124,8 @@ export default {
     this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
 
     var sb = this.$store.state.sb
-    if (sb == undefined) {
-      this.$axios
-        .get("/settingboard/")
-        .then(res => {
-          if (res.data.length > 0) this.school = res.data[0].ojname;
-          else this.school = "LPOJ";
-          this.$store.state.sb = res.data
-        });
-    }
-    else {
-      if (sb.length > 0) this.school = sb[0].ojname;
-      else this.school = "LPOJ";
-    }
 
+    this.school = "SUSTech";
 
   },
   methods: {

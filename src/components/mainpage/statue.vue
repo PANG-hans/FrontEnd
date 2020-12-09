@@ -205,8 +205,8 @@
                        label="Submit time"
 
                        :width="180"></el-table-column>
-      <el-table-column prop="judger"
-                       label="Judger"></el-table-column>
+      <!--<el-table-column prop="judger"
+                       label="Judger"></el-table-column>-->
     </el-table>
     <center>
       <el-pagination @size-change="handleSizeChange"
@@ -234,15 +234,15 @@
 }
 
 .el-collapse-error{
-  background-color:#FEF0F0; 
+  background-color:#FEF0F0;
 }
 
 .el-collapse-success{
-  background-color:#F0F9EB; 
+  background-color:#F0F9EB;
 }
 
 .el-collapse-warning{
-  background-color:#FDF6EC; 
+  background-color:#FDF6EC;
 }
 
 .el-collapse-item__content{
