@@ -22,10 +22,10 @@
                   size="small">
           <el-table-column prop="problem"
                            label="ID"
-                           :width="70"></el-table-column>
+                           :width="170"></el-table-column>
           <el-table-column prop="title"
                            label="Title"
-                           :width="250"></el-table-column>
+                           :width="400"></el-table-column>
           <el-table-column prop="level"
                            label="Level"
                            :width="170">
@@ -51,9 +51,9 @@
                       hit>{{ name }}</el-tag>
             </template>
           </el-table-column> -->
-          <el-table-column prop="score"
+          <!--<el-table-column prop="score"
                            label="Score"
-                           :width="200"></el-table-column>
+                           :width="200"></el-table-column>-->
         </el-table>
         <center>
           <el-pagination @size-change="handleSizeChange"
@@ -154,16 +154,6 @@ export default {
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
-            if (response.data.results[i]["level"] == "1")
-              response.data.results[i]["level"] = "Easy";
-            if (response.data.results[i]["level"] == "2")
-              response.data.results[i]["level"] = "Medium";
-            if (response.data.results[i]["level"] == "3")
-              response.data.results[i]["level"] = "Hard";
-            if (response.data.results[i]["level"] == "4")
-              response.data.results[i]["level"] = "VeryHard";
-            if (response.data.results[i]["level"] == "5")
-              response.data.results[i]["level"] = "ExtremelyHard";
 
             response.data.results[i]["rate"] =
               response.data.results[i]["ac"] +
@@ -207,7 +197,7 @@ export default {
           "&offset=" +
           (this.currentpage - 1) * this.pagesize +
           "&auth=1&search=" +
-          this.searchtext 
+          this.searchtext
           /* +"&oj=" + this.searchoj */
           +"&oj=" + this.searchoj
         )

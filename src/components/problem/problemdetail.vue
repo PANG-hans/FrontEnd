@@ -6,70 +6,8 @@
           <el-row :gutter="18"
                   id="title">{{this.proid+" "}}{{title}}</el-row>
           <br>
-          <!--<el-row :gutter="18"
-                  id="des">Description</el-row>-->
-          <!--<el-row :gutter="18"
-                  id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                 v-html="des"
-                 :key="des"></div>
-          </el-row>-->
-
           <img :src="'data:image/jpeg;base64,'+imgcode"
                class="img-responsive" v-if="imgcode!=''">
-
-         <!-- <el-row :gutter="18"
-                  id="des">Input</el-row>
-          <el-row :gutter="18"
-                  id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                 v-html="input"></div>
-          </el-row>-->
-          <!--<el-row :gutter="18"
-                  id="des">Output</el-row>
-          <el-row :gutter="18"
-                  id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                 v-html="output"></div>
-          </el-row>-->
-
-          <!--<el-row :gutter="18"
-                  style="left:10px">
-            <el-row :gutter="18"
-                    v-for="(item,index) in sinput.length"
-                    :key="index">
-              <el-col :span="11"
-                      id="text">
-                <el-row :gutter="18"
-                        id="des"
-                        style="margin-bottom: 0px;">Sample Input {{item}}<el-button size="mini"
-                             v-clipboard:copy="sinput[index]"
-                             v-clipboard:success="onCopy"
-                             v-clipboard:error="onError"
-                             style="margin-left:8px;float:top;">Copy</el-button>
-                </el-row>
-                <el-row :gutter="18"
-                        id="data"
-                        style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
-              </el-col>
-              <el-col :span="11"
-                      id="text">
-                <el-row :gutter="18"
-                        id="des"
-                        style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
-                <el-row :gutter="18"
-                        id="data"
-                        style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
-              </el-col>
-            </el-row>
-          </el-row>-->
-
-          <!-- <el-row :gutter="18"
-                  id="des">Source</el-row> -->
-          <!-- <el-row :gutter="18"
-                  id="detail">
-            <div style="margin-right:50px;">{{source}}</div>
-          </el-row> -->
           <el-row :gutter="18"
                   id="des">Desciption</el-row>
           <el-row :gutter="18"
@@ -123,30 +61,6 @@
       <el-row :gutter="15">
         <el-card shadow="always">
           <el-collapse v-model="activeNames">
-            <!-- <el-collapse-item name="1"
-                              id="des">
-              <template slot="title">
-                <font color="deepskyblue"
-                      size="4">Creator:</font>
-              </template>
-              <div>{{author}}</div>
-            </el-collapse-item> -->
-            <!--<el-collapse-item name="2"
-                              id="des">
-              <template slot="title">
-                <font color="deepskyblue"
-                      size="4">Date:</font>
-              </template>
-              <div>{{addtime}}</div>
-            </el-collapse-item>-->
-            <!-- <el-collapse-item name="3"
-                              id="des">
-              <template slot="title">
-                <font color="deepskyblue"
-                      size="4">OJ:</font>
-              </template>
-              <div>{{oj}}</div>
-            </el-collapse-item> -->
             <el-collapse-item name="4"
                               id="des">
               <template slot="title">
@@ -163,17 +77,6 @@
               </template>
               <div>{{memory}}</div>
             </el-collapse-item>
-            <!--<el-collapse-item name="7"
-                              id="des">
-              <template slot="title">
-                <font color="deepskyblue"
-                      size="4">Level:</font>
-              </template>
-              <el-tag size="medium"
-                      :type="problemlevel(level)"
-                      disable-transitions
-                      hit>{{ level }}</el-tag>
-            </el-collapse-item>-->
             <el-collapse-item name="6"
                               id="des">
               <template slot="title">
@@ -346,15 +249,6 @@ export default {
         this.$axios
           .get("/problemdata/" + this.ID + "/")
           .then(response => {
-            /*if (response.data["level"] == "1") response.data["level"] = "Easy";
-            if (response.data["level"] == "2")
-              response.data["level"] = "Medium";
-            if (response.data["level"] == "3") response.data["level"] = "Hard";
-            if (response.data["level"] == "4")
-              response.data["level"] = "VeryHard";
-            if (response.data["level"] == "5")
-              response.data["level"] = "ExtremelyHard";*/
-
             if (response.data["tag"] == null) response.data["tag"] = ["无"];
             else response.data["tag"] = response.data["tag"].split("|");
 
@@ -401,9 +295,6 @@ export default {
             }
 
             this.title = response.data.title;
-/*
-            this.level = response.data.level;
-*/
             this.tagnames = response.data.tag;
             this.$refs.prosta.setdata(this.$data)
             console.log(this.$refs["Statusmini"])

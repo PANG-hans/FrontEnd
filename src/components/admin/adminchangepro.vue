@@ -23,9 +23,9 @@
                        width="350"></el-table-column>
       <el-table-column property="tag"
                        label="标签"></el-table-column>
-      <el-table-column property="score"
+     <!-- <el-table-column property="score"
                        label="分数"
-                       width="80"></el-table-column>
+                       width="80"></el-table-column>-->
       <!-- <el-table-column property="oj"
                        label="OJ"
                        width="70"></el-table-column> -->
@@ -62,7 +62,7 @@
                :model="problemform"
                label-position="right"
                v-loading="loading">
-        <!-- <el-form-item label="题目编号：">
+         <el-form-item label="题目编号：">
           <el-input style="width:200px;"
                     v-model="problemform.problem"
                     placeholder="请输入题目编号"
@@ -72,7 +72,7 @@
                        icon="el-icon-search"
                        @click="problemchange"></el-button>
           </el-input>
-        </el-form-item> -->
+        </el-form-item>
 
         <!-- <el-form-item label="特殊选项：添加其他OJ题目用！不知道的话请忽略">
           <el-input v-model="problemform.oj"
@@ -86,7 +86,7 @@
           <el-input v-model="problemform.author"
                     style="width:400px;"></el-input>
         </el-form-item> -->
-        <el-form-item label="标题：">
+        <!--<el-form-item label="标题：">
           <el-input v-model="problemform.title"
                     style="width:400px;"></el-input>
         </el-form-item>
@@ -125,7 +125,7 @@
                     v-model="problemform.hint"
                     autosize
                     style="width:800px;"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <!-- <el-form-item label="来源：">
           <el-input v-model="problemform.source"
                     style="width:400px;"></el-input>
@@ -150,7 +150,7 @@
                            :min="4"
                            :max="1024"></el-input-number>
         </el-form-item>
-        <el-form-item label="权限：">
+        <!--<el-form-item label="权限：">
           <el-select v-model="problemform.auth"
                      placeholder="请选择"
                      style="width:200px;">
@@ -164,7 +164,7 @@
                        label="比赛中"
                        :value="3"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
 
         <el-form-item label="难度：">
           <el-select v-model="problemform.level"
@@ -191,13 +191,13 @@
           <el-input v-model="problemform.tag"
                     style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="分数（建议100~10000）：">
+        <!--<el-form-item label="分数（建议100~10000）：">
           <el-input-number style="width:200px;"
                            v-model="problemform.score"
                            :step="100"
                            :min="100"
                            :max="10000"></el-input-number>
-        </el-form-item>
+        </el-form-item>-->
 
         <el-upload style="width:400px;"
                    ref="upload"
@@ -218,17 +218,19 @@
           <div slot="tip"
                class="el-upload__tip">只能上传zip/jpg文件【注意是小写字母后缀】,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件（utf-8编码）可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如： case1|这是case1的说明</div>
         </el-upload>
+<!--
         <h5><a style="text-decoration: none;color:#67C23A;" target="_blank" href="https://docs.lpoj.cn/doc/judger.html#special-judge">点我看判题机文档</a></h5>
+-->
 
 
-        <el-form-item>
+        <!--<el-form-item>
           <el-input v-model="serviceaddress"
                     placeholder="下载数据需要填写服务端地址，如：http://localhost:8000 ,注意最后不要有斜杠（临时功能）"></el-input>
           <el-button type="success"
                      @click="downFun">下载已上传数据</el-button>
 
         </el-form-item>
-
+-->
         <el-form-item>
           <el-button type="success"
                      @click="onAddProblemSubmit"
@@ -414,7 +416,7 @@ export default {
       catch(error){
         console.log(error)
       }
-      
+
 
       this.problemdataform.problem = this.problemform.problem;
       this.problemdataform.title = this.problemform.title;
