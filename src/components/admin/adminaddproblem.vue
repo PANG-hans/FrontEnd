@@ -144,7 +144,7 @@ export default {
       let config = {
         headers: {"Content-Type": "multipart/form-data"}
       }; //添加请求头
-      this.$axios
+      /*this.$axios
         .post(f.action, param, config) //上传图片
         .then(response => {
           console.log(response.data);
@@ -153,7 +153,7 @@ export default {
         .catch(err => {
           console.log(err);
           f.onError(err);
-        });
+        });*/
     },
     handleRemove(file, fileList) {
       this.fileList = [];
@@ -188,7 +188,7 @@ export default {
       }
 
       try {
-        var response = await this.$axios.post("/commit/creat", this.addproblemform);
+        var response = await this.$axios.post("/commit/creat", this.addproblemform); //提交
       } catch (error) {
         this.$message.error(error);
         return false;
