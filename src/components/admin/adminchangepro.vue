@@ -150,7 +150,7 @@
                            :min="4"
                            :max="1024"></el-input-number>
         </el-form-item>
-        <!--<el-form-item label="权限：">
+        <el-form-item label="权限：">
           <el-select v-model="problemform.auth"
                      placeholder="请选择"
                      style="width:200px;">
@@ -160,13 +160,10 @@
             <el-option key="2"
                        label="私密"
                        :value="2"></el-option>
-            <el-option key="3"
-                       label="比赛中"
-                       :value="3"></el-option>
           </el-select>
-        </el-form-item>-->
+        </el-form-item>
 
-        <el-form-item label="难度：">
+        <!--<el-form-item label="难度：">
           <el-select v-model="problemform.level"
                      placeholder="请选择"
                      style="width:200px;">
@@ -186,7 +183,7 @@
                        label="极其困难"
                        :value="5"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="标签（用|分割）：">
           <el-input v-model="problemform.tag"
                     style="width:400px;"></el-input>

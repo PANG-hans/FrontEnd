@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="always" id="card">
     <el-form :model="form">
-      <el-row :gutter="10">
+      <!--<el-row :gutter="10">
         <el-col :span="3">
           <div style="text-align:center;margin:5px;">昵称</div>
         </el-col>
@@ -16,7 +16,7 @@
         <el-col :span="12">
           <el-input v-model="form.des" autocomplete="off"></el-input>
         </el-col>
-      </el-row>
+      </el-row>-->
       <el-row :gutter="10">
         <el-col :span="3">
           <div style="text-align:center;margin:5px;">新密码（不更改，请输入上次密码）</div>
@@ -33,7 +33,7 @@
           <el-input type="password" v-model="form.comfirm" autocomplete="off"></el-input>
         </el-col>
       </el-row>
-      <el-row :gutter="10">
+      <!--<el-row :gutter="10">
         <el-col :span="3">
           <div style="text-align:center;margin:5px;">学校</div>
         </el-col>
@@ -56,31 +56,15 @@
         <el-col :span="12">
           <el-input v-model="form.classes" autocomplete="off"></el-input>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
+      </el-row>-->
+      <!--<el-row :gutter="10">
         <el-col :span="3">
           <div style="text-align:center;margin:5px;">学号</div>
         </el-col>
         <el-col :span="12">
           <el-input v-model="form.number" autocomplete="off"></el-input>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="3">
-          <div style="text-align:center;margin:5px;">真实姓名</div>
-        </el-col>
-        <el-col :span="12">
-          <el-input v-model="form.realname" autocomplete="off"></el-input>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="3">
-          <div style="text-align:center;margin:5px;">QQ</div>
-        </el-col>
-        <el-col :span="12">
-          <el-input v-model="form.qq" autocomplete="off"></el-input>
-        </el-col>
-      </el-row>
+      </el-row>-->
       <el-row :gutter="10">
         <el-col :span="3">
           <div style="text-align:center;margin:5px;">Email</div>
@@ -107,13 +91,7 @@ export default {
         password: "",
         comfirm: "",
         name: "",
-        des:"",
-        school: "",
-        course: "",
-        classes: "",
         number: "",
-        realname: "",
-        qq: "",
         email: ""
       },
       userid: -1
@@ -126,13 +104,6 @@ export default {
         return;
       }
       if (
-        !this.form.name ||
-        !this.form.school ||
-        !this.form.course ||
-        !this.form.classes ||
-        !this.form.number ||
-        !this.form.realname ||
-        !this.form.qq ||
         !this.form.email
       ) {
         this.$message.error("字段不能为空！");
@@ -140,11 +111,6 @@ export default {
       }
       if (this.form.password != this.form.comfirm) {
         this.$message.error("两次密码不一致！");
-        return;
-      }
-
-      if (this.form.name.length < 2) {
-        this.$message.error("昵称太短！");
         return;
       }
 
@@ -158,13 +124,8 @@ export default {
         return;
       }
 
-      if(this.form.des.length<=0){
-        this.form.des="这个人很懒，什么都没有没有留下。"
-      }
-
  this.$confirm(
         "确定更新吗?",
-        "如果你在参与一场比赛，请勿更新你的【昵称】，会影响排行榜计算，后果自负！",
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -174,11 +135,11 @@ export default {
 
       this.form.password = this.$md5(this.form.password);
       this.$axios
-        .put(
-          "/changeone/",
+        .post(
+          "/login/reset",
           this.form
         )
-        
+
             .then(
               response => {
                 this.$message({
@@ -195,7 +156,7 @@ export default {
                 this.$message.error("更新失败（" + response + "）");
               }
             );
-        
+
       })
 
 
@@ -212,13 +173,7 @@ export default {
             this.username
         )
         .then(response => {
-          this.form.name = response.data[0].name;
-          this.form.school = response.data[0].school;
-          this.form.course = response.data[0].course;
-          this.form.classes = response.data[0].classes;
           this.form.number = response.data[0].number;
-          this.form.realname = response.data[0].realname;
-          this.form.qq = response.data[0].qq;
           this.form.email = response.data[0].email;
           this.userid = this.username;
         });

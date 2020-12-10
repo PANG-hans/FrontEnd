@@ -50,6 +50,12 @@
     <el-form-item label="标签（用|分割）：">
       <el-input v-model="addproblemform.tag" style="width:400px;"></el-input>
     </el-form-item>
+    <el-form-item label="权限：">
+      <el-select v-model="addproblemform.auth" placeholder="请选择" style="width:200px;">
+        <el-option key="1" label="公开" :value="1"></el-option>
+        <el-option key="2" label="隐藏" :value="2"></el-option>
+      </el-select>
+    </el-form-item>
     <el-upload
       style="width:400px;"
       ref="upload"

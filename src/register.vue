@@ -117,7 +117,7 @@ export default {
       //   .post("/userdata/", this.form)
       //   .then(response => {
       this.$axios
-        .post("/register/", this.form)
+        .post("/signin/", this.form)
         .then(response => {
           /* if (response.data == "usererror") {
             this.$message.error("用户名已存在！");
