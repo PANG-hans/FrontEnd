@@ -393,7 +393,7 @@ export default {
           var curtime = response2.data;
           //this.$axios.get("/")
           this.$axios
-            .post("/judgestatusput/", {
+            .post("/commit/query", {
               user: sessionStorage.username,
               /* oj: this.oj, */
               problem: this.ID,

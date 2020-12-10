@@ -97,35 +97,35 @@ export default {
 
       addproblemform: {
         problem: this.problemcount + 1,
-        author: sessionStorage.name,
+        /*author: sessionStorage.name,
         title: "题目标题",
         des: "题目说明\n支持HTML格式和Katex公式\n\n，不能为空",
         input: "输入说明\n支持HTML格式和Katex公式\n\n，不能为空",
         output: "输出说明\n支持HTML格式和Katex公式\n\n，不能为空",
         sinput: "1 1|#)2 2",
         soutput: "2|#)4",
-        source: "LPOJ",
+        source: "LPOJ",*/
         time: 1000,
         memory: 64,
-        hint: "提示\n支持HTML格式和Katex公式\n\n，不能为空",
+       /* hint: "提示\n支持HTML格式和Katex公式\n\n，不能为空",
         auth: 2,
         tag: "简单题|模拟",
         template:
           "*****C++*****\n\n*****C*****\n\n*****Python2*****\n\n*****Python3*****\n\n*****Java*****\n\n*****Swift5.1*****\n\n",
-        level: 3,
-        score: 100,
+        */level: 3,
+        /*score: 100,
         oj: "LPOJ",
         isspj: false,
-        istemp: false
+        istemp: false*/
       },
       addproblemdataform: {
         problem: this.problemcount + 1,
         title: "题目标题",
         tag: "简单题|模拟|贪心",
         level: 3,
-        score: 100,
+        /*score: 100,
         auth: 2,
-        oj: ""
+        oj: ""*/
       }
     };
   },
@@ -188,7 +188,7 @@ export default {
       }
 
       try {
-        var response = await this.$axios.post("/problem/", this.addproblemform);
+        var response = await this.$axios.post("/commit/creat", this.addproblemform);
       } catch (error) {
         this.$message.error(error);
         return false;
@@ -197,9 +197,9 @@ export default {
       this.addproblemdataform.title = this.addproblemform.title;
       this.addproblemdataform.level = this.addproblemform.level;
       this.addproblemdataform.tag = this.addproblemform.tag;
-      this.addproblemdataform.score = this.addproblemform.score;
+      /*this.addproblemdataform.score = this.addproblemform.score;
       this.addproblemdataform.auth = this.addproblemform.auth;
-      this.addproblemdataform.oj = this.addproblemform.oj;
+      this.addproblemdataform.oj = this.addproblemform.oj;*/
 
       var tag = this.addproblemdataform.tag.split("|");
 
