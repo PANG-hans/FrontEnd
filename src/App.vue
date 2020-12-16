@@ -139,7 +139,7 @@ export default {
     handleCommand (command) {
       if (command == "logout") {
         this.$axios
-          .get("/logout/")
+          .get("/logout")
           .then(response => {
             this.$message({
               message: "登出成功！",

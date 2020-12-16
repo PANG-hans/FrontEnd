@@ -44,7 +44,7 @@ export default {
     loginClick() {
       var pas = this.$md5(this.form.password);
       this.$axios
-        .post("/login/", {
+        .post("/login", {
           username: this.form.username,
           password: pas
         })

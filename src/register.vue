@@ -65,7 +65,9 @@ export default {
       form: {
         username: "",
         password: "",
+/*
         comfirm: "",
+*/
         email: ""
       }
     };
@@ -117,12 +119,12 @@ export default {
       //   .post("/userdata/", this.form)
       //   .then(response => {
       this.$axios
-        .post("/signin/", this.form)
+        .post("/signin", this.form)
         .then(response => {
-          /* if (response.data == "usererror") {
+          if (response.data == "usererror") {
             this.$message.error("用户名已存在！");
             return;
-          } */
+          }
           this.$message({
             message: "注册成功！",
             type: "success"
