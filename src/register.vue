@@ -1,57 +1,60 @@
 <template>
-  <el-dialog title="注册"
-             :visible.sync="dialogRegisterVisible">
-    <el-form :model="form"
-             @keyup.native.enter="registerClick">
+  <el-dialog title="注册" :visible.sync="dialogRegisterVisible">
+    <el-form :model="form" @keyup.native.enter="registerClick">
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">用户名</div>
+          <div style="text-align: center; margin: 5px">用户名</div>
         </el-col>
         <el-col :span="12">
-          <el-input v-model="form.username"
-                    autocomplete="off"
-                    placeholder="不少于3个字符的用户名，必填"></el-input>
+          <el-input
+            v-model="form.username"
+            autocomplete="off"
+            placeholder="不少于3个字符的用户名，必填"
+          ></el-input>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">密码</div>
+          <div style="text-align: center; margin: 5px">密码</div>
         </el-col>
         <el-col :span="12">
-          <el-input type="password"
-                    v-model="form.password"
-                    autocomplete="off"
-                    placeholder="不少于6个字符的密码，必填"></el-input>
+          <el-input
+            type="password"
+            v-model="form.password"
+            autocomplete="off"
+            placeholder="不少于6个字符的密码，必填"
+          ></el-input>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">确认密码</div>
+          <div style="text-align: center; margin: 5px">确认密码</div>
         </el-col>
         <el-col :span="12">
-          <el-input type="password"
-                    v-model="form.comfirm"
-                    autocomplete="off"
-                    placeholder="请重复密码，必填"></el-input>
+          <el-input
+            type="password"
+            v-model="form.comfirm"
+            autocomplete="off"
+            placeholder="请重复密码，必填"
+          ></el-input>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">Email</div>
+          <div style="text-align: center; margin: 5px">Email</div>
         </el-col>
         <el-col :span="12">
-          <el-input v-model="form.email"
-                    autocomplete="off"
-                    placeholder="请填写真实邮箱"></el-input>
+          <el-input
+            v-model="form.email"
+            autocomplete="off"
+            placeholder="请填写真实邮箱"
+          ></el-input>
         </el-col>
       </el-row>
     </el-form>
-    <div slot="footer"
-         class="dialog-footer">
+    <div slot="footer" class="dialog-footer">
       <el-button @click="dialogRegisterVisible = false">取 消</el-button>
-      <el-button type="primary"
-                 @click="registerClick">确 定
-      </el-button>
+      <el-button type="primary" @click="registerClick">确 定 </el-button>
     </div>
   </el-dialog>
 </template>
@@ -65,11 +68,14 @@ export default {
       form: {
         username: "",
         password: "",
-/*
         comfirm: "",
-*/
-        email: ""
-      }
+        email: "",
+      },
+      sendToBackEndSIgnInMessage: {
+        username: "",
+        password: "",
+        email: "",
+      },
     };
   },
   methods: {
@@ -114,25 +120,31 @@ export default {
       }
 
       this.form.password = this.$md5(this.form.password);
-
+      this.sendToBackEndSIgnInMessage.username = this.form.username;
+      this.sendToBackEndSIgnInMessage.password = this.form.password;
+      this.sendToBackEndSIgnInMessage.email = this.form.email;
       // this.$axios
       //   .post("/userdata/", this.form)
       //   .then(response => {
       this.$axios
-        .post("/signin", this.form)
-        .then(response => {
-          if (response.data == "usererror") {
+        .post("/signin", {
+          username: this.form.username,
+          password: this.form.password,
+          email: this.form.email
+        })
+        .then((response) => {
+          /* if (response.data == "usererror") {
             this.$message.error("用户名已存在！");
             return;
-          }
+          } */
           this.$message({
             message: "注册成功！",
-            type: "success"
+            type: "success",
           });
           this.dialogRegisterVisible = false;
           this.form.password = "";
         })
-        .catch(error => {
+        .catch((error) => {
           this.$message.error(
             "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
           );
@@ -146,8 +158,8 @@ export default {
       //       "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
       //     );
       // });
-    }
-  }
+    },
+  },
 };
 </script>
 

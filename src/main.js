@@ -27,7 +27,9 @@ Vue.prototype.$md5 = md5;
 //开启debug模式
 Vue.config.debug = true;
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = process.env.API_ROOT//"localhost:8120"
+axios.defaults.baseURL = "http://localhost:8888"//process.env.API_ROOT
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+// backend address and port
 Vue.prototype.$axios = axios;
 
 const store = new Vuex.Store({
