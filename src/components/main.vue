@@ -10,33 +10,33 @@
       <el-row :gutter="10">
         <topuser></topuser>
       </el-row>
-      <el-row :gutter="10">
+      <!--<el-row :gutter="10">
         <ojmessage></ojmessage>
-      </el-row>
-      <el-row :gutter="10">
+      </el-row>-->
+      <!--<el-row :gutter="10">
         <cfrate></cfrate>
-      </el-row>
+      </el-row>-->
     </el-col>
     <el-col :span="18">
-      <soulrow></soulrow>
-    
+      <!--<soulrow></soulrow>-->
+
       <el-row>
         <el-tabs type="border-card">
-          <el-tab-pane :label="label.des" >
+          <el-tab-pane :label="label.des">
             <description></description>
           </el-tab-pane>
-          <el-tab-pane :label="label.rank" :lazy="true">
+          <!--<el-tab-pane :label="label.rank" :lazy="true">
             <rankchart></rankchart>
-          </el-tab-pane>
+          </el-tab-pane>-->
           <el-tab-pane :label="label.rule" :lazy="true">
             <ratingrule></ratingrule>
           </el-tab-pane>
         </el-tabs>
       </el-row>
-     
-      <el-row>
-        <contestmini></contestmini>
-      </el-row>
+
+      <!-- <el-row>
+         <contestmini></contestmini>
+       </el-row>-->
     </el-col>
   </el-row>
 </template>
@@ -52,6 +52,7 @@ import contestmini from "@/components/utils/contestmini";
 import description from "@/components/utils/description";
 import acrank from "@/components/utils/acrank";
 import cfrate from "@/components/utils/cfrate";
+
 export default {
   components: {
     rankchart,
@@ -69,7 +70,7 @@ export default {
   data() {
     return {
       label: {
-        rank: "Rank",
+        /*rank: "Rank",*/
         team: "Team",
         rule: "Rule",
         des: "Description"
@@ -80,9 +81,7 @@ export default {
   mounted() {
 
   },
-  methods: {
- 
-  }
+  methods: {}
 };
 </script>
 

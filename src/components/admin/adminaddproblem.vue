@@ -6,7 +6,7 @@
     <el-upload
       style="width:400px;"
       ref="upload"
-      :action="uploadaddress"
+      :action="desaddress"
       :on-exceed="handleExceed"
       :on-change="handleChange"
       :on-success="handleSuccessNone"
@@ -50,16 +50,16 @@
     <el-form-item label="标签（用|分割）：">
       <el-input v-model="addproblemform.tag" style="width:400px;"></el-input>
     </el-form-item>
-    <el-form-item label="权限：">
+    <el-form-item label="状态：">
       <el-select v-model="addproblemform.auth" placeholder="请选择" style="width:200px;">
-        <el-option key="1" label="公开" :value="1"></el-option>
-        <el-option key="2" label="隐藏" :value="2"></el-option>
+        <el-option key="1" label="开放" :value="1"></el-option>
+        <el-option key="2" label="未开放" :value="2"></el-option>
       </el-select>
     </el-form-item>
     <el-upload
       style="width:400px;"
       ref="upload"
-      :action="uploadaddress"
+      :action="dataaddress"
       :on-exceed="handleExceed"
       :on-change="handleChange"
       :on-success="handleSuccessNone"
@@ -91,7 +91,8 @@ export default {
   data() {
     return {
       problemcount: 0,
-      uploadaddress: "/uploadfile/",
+      desaddress: "/commit/create",
+      dataaddress: "/commit/update",
       fileList: [],
       loading: false,
 
@@ -130,7 +131,7 @@ export default {
     };
   },
   methods: {
-    myupload(f) {
+    myupload(f) {//需要修改上传方式
       let param = new FormData(); //创建form对象
       var tail = f.file.name.split(".");
 
@@ -181,11 +182,11 @@ export default {
       this.$router.go(0);
     },
     async handleSuccess(response, file, fileList) {
-      if (this.addproblemform.isspj == true) {
+      /*if (this.addproblemform.isspj == true) {
         this.addproblemform.hint =
           this.addproblemform.hint +
           "\n <b>【本题为Special Judge，即答案可能有多种情况】</b>";
-      }
+      }*/
 
       try {
         var response = await this.$axios.post("/commit/creat", this.addproblemform); //提交
@@ -235,7 +236,7 @@ export default {
     onAddProblemSubmit() {
       if (this.fileList.length <= 0) {
         this.$confirm(
-          "确定添加吗？本次添加没有添加数据文件！后续可在修改题目中添加",
+          "确定添加吗？本次添加没有添加任何文件！后续可在修改题目中添加",
           "添加题目",
           {
             confirmButtonText: "确定",
@@ -257,7 +258,8 @@ export default {
         li[1] != "zip" &&
         li[1] != "jpeg" &&
         li[1] != "jpg" &&
-        li[1] != "png"
+        li[1] != "png" &&
+        li[1] != "md"
       ) {
         this.$message.error("数据文件名名不正确！后缀应为zip/jpeg/jpg");
         this.fileList = [];
