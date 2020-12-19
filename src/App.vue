@@ -137,7 +137,7 @@ export default {
     },
 
     handleCommand (command) {
-      if (command == "logout") {
+      if (command === "logout") {
         this.$axios
           .get("/logout")
           .then(response => {
@@ -159,25 +159,25 @@ export default {
             );
           });
       }
-      if (command == "home") {
+      if (command === "home") {
         this.$router.push({
           name: "user",
           query: { username: sessionStorage.username }
         });
       }
-      if (command == "setting") {
+      if (command === "setting") {
         this.$router.push({
           name: "setting",
           params: { username: sessionStorage.username }
         });
       }
-      if (command == "submittion") {
+      if (command === "submitting") {
         this.$router.push({
           name: "statue",
           query: { username: sessionStorage.username }
         });
       }
-      if (command == "admin") {
+      if (command === "admin") {
         this.$router.push({
           name: "admin"
         });

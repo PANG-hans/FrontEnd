@@ -49,53 +49,46 @@ export default {
           password: pas
         })
         .then(response => {
-          /* if (response.data == "passworderror") {
-            this.$message.error("密码错误");
-            return;
-          } */
-          this.$message({
-            message: "登录成功！",
-            type: "success"
-          });
-
-          sessionStorage.setItem("username", this.form.username);
-          sessionStorage.setItem("name", response.data.name);
-          sessionStorage.setItem("type", response.data.type);
-
-
-
-          this.dialogLoginVisible = false;
-          if(this.$store.state.loginip==""){
-            this.$store.state.loginip = "chrome" // 后台会处理
-          }
-
-          if(this.$store.state.loginip==""){
-            this.$store.state.loginip = "chrome" // 后台会处理
-          }
-          if(this.$store.state.loginip==undefined){
-            this.$store.state.loginip = "chrome" // 后台会处理
-          }
-
-          this.$axios
-            .post("/setlogindata/", {
-              username: this.form.username,
-              ip: this.$store.state.loginip,
-              msg: this.$store.state.logininfo
-            })
-            .then(response => {
-              this.$router.go(0);
-            })
-            .catch(error => {
-              this.$message.error(
-                "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-              );
-              sessionStorage.setItem("username", "");
-              sessionStorage.setItem("name", "");
-              sessionStorage.setItem("rating", "");
-              sessionStorage.setItem("type", "");
-              sessionStorage.setItem("acpro", "");
+            /* if (response.data == "passworderror") {
+              this.$message.error("密码错误");
+              return;
+            } */
+            this.$message({
+              message: "登录成功！",
+              type: "success"
             });
-        })
+
+            sessionStorage.setItem("username", this.form.username);
+            sessionStorage.setItem("name", response.data.name);
+            sessionStorage.setItem("type", response.data.type);
+
+
+            this.dialogLoginVisible = false;
+            // server log the login informations , useless in there
+            if (this.$store.state.loginip === "" || this.$store.state.loginip === undefined) {
+              this.$store.state.loginip = "chrome" // 后台会处理
+            }
+            // this.$axios
+            //   .post("/setlogindata/", {
+            //     username: this.form.username,
+            //     ip: this.$store.state.loginip,
+            //     msg: this.$store.state.logininfo
+            //   })
+            //   .then(response => {
+            //     this.$router.go(0);
+            //   })
+            //   .catch(error => {
+            //     this.$message.error(
+            //       "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+            //     );
+            //     sessionStorage.setItem("username", "");
+            //     sessionStorage.setItem("name", "");
+            //     sessionStorage.setItem("rating", "");
+            //     sessionStorage.setItem("type", "");
+            //     sessionStorage.setItem("acpro", "");
+            //   });
+          }
+        )
         .catch(error => {
           this.$message.error("用户名不存在（" + error + "）");
         });
@@ -104,7 +97,7 @@ export default {
 };
 </script>
 
-<style  scoped>
+<style scoped>
 .el-row {
   margin-bottom: 20px;
 }
