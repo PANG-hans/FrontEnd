@@ -51,6 +51,7 @@ export default {
     this.setdata();
     var sb = this.$store.state.sb
     if(sb==undefined){
+      console.log("enter settingboard");
       this.$axios
       .get("/settingboard/")
       .then(res => {

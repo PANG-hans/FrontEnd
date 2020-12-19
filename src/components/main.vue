@@ -53,6 +53,7 @@ import description from "@/components/utils/description";
 import acrank from "@/components/utils/acrank";
 import cfrate from "@/components/utils/cfrate";
 
+
 export default {
   components: {
     rankchart,

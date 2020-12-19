@@ -5,25 +5,29 @@
 </template>
 
 <script>
+const loadshLibiary = require('lodash');
+
 export default {
   name: "languageselect",
 
   data() {
     return {
-      languagelist: ["MySQL","SQlite","postgreSql"]
+      languagelist: ["MySQL","SQLite","PostgreSQL"]
     };
   },
   created() {
+    const compiled = loadshLibiary.template('/info/<%= problemId %>')
+    ({'problemId': this.ID});
+    console.log(compiled);
     console.log("languageselect");
-    var sb = this.$store.state.sb
-    if( sb ==undefined){
+
+    const sb = this.$store.state.sb;
+    console.log(sb)
+    if( sb === undefined){
       this.$axios
-      .get("/settingboard/")
-      .then(res => {
-        if (res.data.length > 0) {
-          this.languagelist = res.data[0].openlanguage.split("|");
-        }
-        this.$store.state.sb = res.data
+      .get(compiled)
+      .then(result => {
+        this.$store.state.sb = result.data
       })
       .catch(error => {
         this.$message.error(

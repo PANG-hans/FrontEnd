@@ -17,11 +17,11 @@
             <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
                  v-html="input"></div>
             <div>
-<!--              <VueMarkdown style="margin-right:50px;word-break:break-all;white-space:pre-line;"-->
-<!--                           v-html="detail_markdown">-->
-<!--              </VueMarkdown>-->
+              <!--              <VueMarkdown style="margin-right:50px;word-break:break-all;white-space:pre-line;"-->
+              <!--                           v-html="detail_markdown">-->
+              <!--              </VueMarkdown>-->
             </div>
-            153654{{ detail }}
+            153654
           </el-row>
           <br>
         </el-card>
@@ -99,21 +99,21 @@
               </template>
               <div>{{ ddl }}</div>
             </el-collapse-item>
-<!--            <el-collapse-item name="6"
-                              id="des">
-              <template slot="title">
-                <font color="deepskyblue"
-                      size="4">Tags:</font>
-              </template>
-              <el-tag id="tag"
-                      v-for="(name,index) in tagnames"
-                      :key="index"
-                      size="medium"
-                      type="info"
-                      disable-transitions
-                      hit>{{ name }}
-              </el-tag>
-            </el-collapse-item>-->
+            <!--            <el-collapse-item name="6"
+                                          id="des">
+                          <template slot="title">
+                            <font color="deepskyblue"
+                                  size="4">Tags:</font>
+                          </template>
+                          <el-tag id="tag"
+                                  v-for="(name,index) in tagnames"
+                                  :key="index"
+                                  size="medium"
+                                  type="info"
+                                  disable-transitions
+                                  hit>{{ name }}
+                          </el-tag>
+                        </el-collapse-item>-->
           </el-collapse>
         </el-card>
       </el-row>
@@ -145,6 +145,7 @@ import prostatistice from "@/components/utils/prostatistice";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
+const loadshLibiary = require('lodash');
 
 export default {
   name: "problemdetail",
@@ -185,17 +186,12 @@ export default {
       level: "Easy",
       code: "",
       language: "CHOICE!",
-
-      codetemplate: {},
-
+      codetemplate: {'MySQL': '', 'SQLite': '', 'PostgreSQL': ''},
       ac: 100,
       mle: 100,
       tle: 100,
-      rte: 100,
-      pe: 100,
-      ce: 100,
       wa: 100,
-      se: 100,
+      re: 100,
       submitbuttontext: "提交后请勿重复刷新/支持将文件拖入代码框",
       judgetype: "primary",
       loadingshow: false,
@@ -221,7 +217,7 @@ export default {
       this.$message.error("参数错误" + "(" + this.ID + ")");
       return;
     }
-    var auth = 1;
+    //let auth = 1;
 
 
     this.$axios
@@ -233,109 +229,141 @@ export default {
       .then(res => {
         this.imgcode = res.data;
       });
-
-
     this.$axios
-      .get("/problems/" + this.ID)
+      .get(
+        loadshLibiary.template('/problems/<%= problemId %>')({'problemId': this.ID})
+      )
       .then(response => {
-        this.title = response.data.name;
-        auth = response.data.auth;
-        if ((auth == 2 || auth == 3) && (sessionStorage.type == 1 || sessionStorage.type == "")) {
-          this.title = "非法访问！请在比赛中访问题目！";
-          this.$message.error("服务器错误！" + "(" + "无权限" + ")");
-          return;
+          this.title = response.data.name;
+          console.log("line 241");
+          // auth = response.data.auth;
+          // if ((auth == 2 || auth == 3) && (sessionStorage.type == 1 || sessionStorage.type == "")) {
+          //   this.title = "非法访问！请在比赛中访问题目！";
+          //   this.$message.error("服务器错误！" + "(" + "无权限" + ")");
+          //   return;
+          // }
+          this.proid = this.ID
+          //this.mdfile = "#####TEST Index";//
+          // this.detail_markdown = "#####TEST Index";
+          console.log(response.data.description);
+          this.des = response.data.description;
+          this.input = response.data.description;
+          this.output = response.data.output;
+          // this.sinput = response.data.sinput.split("|#)"); //分隔符
+          // this.soutput = response.data.soutput.split("|#)");
+          // this.author = response.data.author;
+          // this.addtime = response.data["addtime"] = moment(
+          //   response.data["addtime"]
+          // ).format("YYYY-MM-DD HH:mm:ss");
+
+          /* this.oj = response.data.oj; */
+          /*this.source = response.data.source;*/
+          this.time = "Display After Choice Language MS";
+          console.log(response.data["deadline"]);
+          this.ddl = moment(response.data["deadline"] * 1000).format("YYYY-MM-DD HH:MM");
+          this.memory = "Display After Choice Language MB";
+          this.hint = response.data.hint;
+
+          // var li = response.data.template.split("*****")
+          // for (var i = 1; i < li.length; i += 2) {
+          //   this.codetemplate[li[i]] = li[i + 1]
+          // }
+          this.code = this.codetemplate[this.language]
+
+          /* if (this.oj != "LPOJ") {
+            this.proid = this.source
+          } */
+          this.$axios
+            .get(
+              loadshLibiary.template('/persona/<%= username %>/<%= questionId %>')
+              ({'questionId': this.ID, 'username': sessionStorage.getItem('username')}),
+              {headers: {'token': sessionStorage.getItem("token"),}}
+            )
+            .then(response => {
+              if (response.data['submission'] === 0) {
+                this.ac = 0;
+                this.wa = 0;
+                this.mle = 0;
+                this.tle = 0;
+                this.re = 0;
+              } else {
+                this.ac = parseFloat(((response.data.ac * 100) / response.data['submission']).toFixed(2));
+                this.mle = parseFloat(((response.data.mle * 100) / response.data['submission']).toFixed(2));
+                this.tle = parseFloat(((response.data.tle * 100) / response.data['submission']).toFixed(2));
+                this.wa = parseFloat(((response.data.wa * 100) / response.data['submission']).toFixed(2));
+                this.re = parseFloat(((response.data.re * 100) / response.data['submission']).toFixed(2));
+                console.log(this.re);
+              }
+              console.log(this.$data);
+              //this.$refs.prosta.setdata(this.$data)
+              console.log(this.$refs["Statusmini"])
+              console.log(this.ID);
+              console.log(sessionStorage.username);
+              this.$refs["Statusmini"].setstatus(this.ID, sessionStorage.username, "");
+            })
+            .catch(error => {
+              this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+            });
+          // this.$axios
+          //   .get("/problemdata/" + this.ID + "/")
+          //   .then(response => {
+          //     if (response.data["tag"] == null) response.data["tag"] = ["无"];
+          //     else response.data["tag"] = response.data["tag"].split("|");
+          //
+          //     if (response.data.submission == 0) {
+          //       this.ac = 0;
+          //       this.mle = 0;
+          //       this.tle = 0;
+          //       this.rte = 0;
+          //       this.pe = 0;
+          //       this.ce = 0;
+          //       this.wa = 0;
+          //       this.se = 0;
+          //     } else {
+          //       this.ac = parseFloat(
+          //         ((response.data.ac * 100) / response.data.submission).toFixed(2)
+          //       );
+          //       this.mle = parseFloat(
+          //         ((response.data.mle * 100) / response.data.submission).toFixed(
+          //           2
+          //         )
+          //       );
+          //       this.tle = parseFloat(
+          //         ((response.data.tle * 100) / response.data.submission).toFixed(
+          //           2
+          //         )
+          //       );
+          //       this.rte = parseFloat(
+          //         ((response.data.rte * 100) / response.data.submission).toFixed(
+          //           2
+          //         )
+          //       );
+          //       this.pe = parseFloat(
+          //         ((response.data.pe * 100) / response.data.submission).toFixed(2)
+          //       );
+          //       this.ce = parseFloat(
+          //         ((response.data.ce * 100) / response.data.submission).toFixed(2)
+          //       );
+          //       this.wa = parseFloat(
+          //         ((response.data.wa * 100) / response.data.submission).toFixed(2)
+          //       );
+          //       this.se = parseFloat(
+          //         ((response.data.se * 100) / response.data.submission).toFixed(2)
+          //       );
+          //     }
+          //
+          //     this.title = response.data.title;
+          //     this.tagnames = response.data.tag;
+          //     this.$refs.prosta.setdata(this.$data)
+          //     console.log(this.$refs["Statusmini"])
+          //     this.$refs["Statusmini"].setstatus(this.ID, sessionStorage.username, "");
+          //
+          //   })
+          //   .catch(error => {
+          //     this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+          //   });
         }
-        this.proid = this.ID
-        //this.mdfile = "#####TEST Index";//
-        // this.detail_markdown = "#####TEST Index";
-        console.log(response.data.description);
-        this.des = response.data.description;
-        this.input = response.data.description;
-        this.output = response.data.output;
-        // this.sinput = response.data.sinput.split("|#)"); //分隔符
-        // this.soutput = response.data.soutput.split("|#)");
-        // this.author = response.data.author;
-        // this.addtime = response.data["addtime"] = moment(
-        //   response.data["addtime"]
-        // ).format("YYYY-MM-DD HH:mm:ss");
-
-        /* this.oj = response.data.oj; */
-        /*this.source = response.data.source;*/
-        this.time = response.data.time + "MS";
-        this.ddl = moment(response.data.deadline).format("YYYY-MM-DD HH:MM");
-        this.memory = response.data.memory + "MB";
-        this.hint = response.data.hint;
-
-        // var li = response.data.template.split("*****")
-        // for (var i = 1; i < li.length; i += 2) {
-        //   this.codetemplate[li[i]] = li[i + 1]
-        // }
-        this.code = this.codetemplate[this.language]
-
-        /* if (this.oj != "LPOJ") {
-          this.proid = this.source
-        } */
-
-        // TODO
-        // this.$axios
-        //   .get("/problemdata/" + this.ID + "/")
-        //   .then(response => {
-        //     if (response.data["tag"] == null) response.data["tag"] = ["无"];
-        //     else response.data["tag"] = response.data["tag"].split("|");
-        //
-        //     if (response.data.submission == 0) {
-        //       this.ac = 0;
-        //       this.mle = 0;
-        //       this.tle = 0;
-        //       this.rte = 0;
-        //       this.pe = 0;
-        //       this.ce = 0;
-        //       this.wa = 0;
-        //       this.se = 0;
-        //     } else {
-        //       this.ac = parseFloat(
-        //         ((response.data.ac * 100) / response.data.submission).toFixed(2)
-        //       );
-        //       this.mle = parseFloat(
-        //         ((response.data.mle * 100) / response.data.submission).toFixed(
-        //           2
-        //         )
-        //       );
-        //       this.tle = parseFloat(
-        //         ((response.data.tle * 100) / response.data.submission).toFixed(
-        //           2
-        //         )
-        //       );
-        //       this.rte = parseFloat(
-        //         ((response.data.rte * 100) / response.data.submission).toFixed(
-        //           2
-        //         )
-        //       );
-        //       this.pe = parseFloat(
-        //         ((response.data.pe * 100) / response.data.submission).toFixed(2)
-        //       );
-        //       this.ce = parseFloat(
-        //         ((response.data.ce * 100) / response.data.submission).toFixed(2)
-        //       );
-        //       this.wa = parseFloat(
-        //         ((response.data.wa * 100) / response.data.submission).toFixed(2)
-        //       );
-        //       this.se = parseFloat(
-        //         ((response.data.se * 100) / response.data.submission).toFixed(2)
-        //       );
-        //     }
-        //
-        //     this.title = response.data.title;
-        //     this.tagnames = response.data.tag;
-        //     this.$refs.prosta.setdata(this.$data)
-        //     console.log(this.$refs["Statusmini"])
-        //     this.$refs["Statusmini"].setstatus(this.ID, sessionStorage.username, "");
-        //
-        //   })
-        //   .catch(error => {
-        //     this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
-        //   });
-      })
+      )
       .catch(error => {
         this.title = "非法访问！请在比赛中访问题目！";
         this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
@@ -345,22 +373,33 @@ export default {
     showdialog() {
       if (this.submitid != -1)
         this.$refs["Statusmini"].showdialog(this.submitid)
-    },
+    }
+    ,
     changetemplate(lang) {
-      var t = this.codetemplate[lang]
-      if (t) {
+      console.log("changetemplate");
+      console.log(lang);
+      //this.$axios.post("/problems/info/{questionid}/{language}")
+      const codetemplateElement = this.codetemplate[lang];
+      console.log(codetemplateElement);
+      if (codetemplateElement === '') {
         this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(() => {
-
-          this.code = this.codetemplate[lang]
+          this.code = this.codetemplate[lang];
         })
       }
-
-
-    },
+      const compiled = loadshLibiary.template('/problems/info/<%= problemId %>/<%= language %>')
+      ({'problemId': this.ID, 'language': lang});
+      console.log(compiled);
+      this.$axios.get(compiled)
+        .then(response => {
+          this.time = response.data['time'] * 1000 + "MS";
+          this.memory = response.data['memory'] / 1000 + "MB";
+        })
+    }
+    ,
     reRender() {
       if (window.MathJax) {
         console.log('rendering mathjax');
@@ -372,21 +411,25 @@ export default {
         });
         window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
       }
-    },
+    }
+    ,
     onCopy(e) {
       this.$message.success("复制成功！");
-    },
+    }
+    ,
     // 复制失败
     onError(e) {
       this.$message.error("复制失败：" + e);
-    },
+    }
+    ,
     problemlevel: function (type) {
-      if (type == "Easy") return "info";
-      if (type == "Medium") return "success";
-      if (type == "Hard") return "";
-      if (type == "VeryHard") return "warning";
-      if (type == "ExtremelyHard") return "danger";
-    },
+      if (type === "Easy") return "info";
+      if (type === "Medium") return "success";
+      if (type === "Hard") return "";
+      if (type === "VeryHard") return "warning";
+      if (type === "ExtremelyHard") return "danger";
+    }
+    ,
     submit: function () {
       /*if (this.addtime == "") {
         this.$message.error("非法操作！");
@@ -420,142 +463,148 @@ export default {
           message: "提交中..."
         });
         //this.$axios.get("/currenttime/").then(response2 => {
-          // console.log(this.userip);
-          //var curtime = response2.data;
-          //this.$axios.get("/")
-          this.$axios
-            .post("/commit/query/" + this.ID, {
-              username: sessionStorage.username,
-              /* oj: this.oj, */
-              questionId: this.ID,
-              language: 1,
-              commitCode: this.code,
-              testOrRun: 0,
-              /* message: this.oj == "LPOJ" ? "0" : (this.proid + ""),
-              problemtitle: (this.oj == "LPOJ" ? "LPOJ" : "") + (this.oj == "LPOJ" ? ' - ' : "") + (this.oj == "LPOJ" ? this.proid : "") + ' ' + this.title, */
-            },{
-              headers: {
-                'token': sessionStorage.getItem("token"),
-              }
-            })
-            .then(response => {
-              this.$message({
-                message: "提交成功！",
-                type: "success"
-              });
-              // clearInterval(this.$store.state.submittimer);
-              // this.submitid = response.data.id;
-              this.submitbuttontext = response.data.commitLog.state;
-              this.judgetype = "";
-              // this.loadingshow = true;
-
-              //创建一个全局定时器，定时刷新状态
-              // this.$store.state.submittimer = setInterval(this.timer, 3000);
-            })
-            .catch(error => {
-              this.$message.error("服务器错误！" + "(请检查编码（代码需要utf-8编码）或联系管理员)");
+        // console.log(this.userip);
+        //var curtime = response2.data;
+        //this.$axios.get("/")
+        this.$axios
+          .post("/commit/query/" + this.ID, {
+            username: sessionStorage.username,
+            /* oj: this.oj, */
+            questionId: this.ID,
+            language: 1,
+            commitCode: this.code,
+            testOrRun: 0,
+            /* message: this.oj == "LPOJ" ? "0" : (this.proid + ""),
+            problemtitle: (this.oj == "LPOJ" ? "LPOJ" : "") + (this.oj == "LPOJ" ? ' - ' : "") + (this.oj == "LPOJ" ? this.proid : "") + ' ' + this.title, */
+          }, {
+            headers: {
+              'token': sessionStorage.getItem("token"),
+            }
+          })
+          .then(response => {
+            this.$message({
+              message: "提交成功！",
+              type: "success"
             });
+            // clearInterval(this.$store.state.submittimer);
+            // this.submitid = response.data.id;
+            this.submitbuttontext = response.data.commitLog.state;
+            this.judgetype = "";
+            // this.loadingshow = true;
+            //创建一个全局定时器，定时刷新状态
+            // this.$store.state.submittimer = setInterval(this.timer, 3000);
+          })
+          .catch(error => {
+            this.$message.error("服务器错误！" + "(请检查编码（代码需要utf-8编码）或联系管理员)");
+          });
         //});
       });
-    },
+    }
+    ,
     timer: function () {
       if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框") return;
-      this.$axios.get("/judgestatus/" + this.submitid + "/").then(response => {
-        this.loadingshow = false;
-        var testcase = response.data["testcase"];
-        if (response.data["result"] == "-1") {
-          response.data["result"] = "Pending";
-          this.loadingshow = true;
-          this.judgetype = "info";
-        }
+      this.$axios
+        .get(
+          loadshLibiary.template('/judgestatus/<%= submitid %>/')({'submitid': this.submitid})
+        )
+        .then(response => {
+          this.loadingshow = false;
+          var testcase = response.data["testcase"];
+          if (response.data["result"] == "-1") {
+            response.data["result"] = "Pending";
+            this.loadingshow = true;
+            this.judgetype = "info";
+          }
 
-        if (response.data["result"] == "-2") {
-          response.data["result"] = "Judging";
-          this.loadingshow = true;
-          this.judgetype = "";
-        }
+          if (response.data["result"] == "-2") {
+            response.data["result"] = "Judging";
+            this.loadingshow = true;
+            this.judgetype = "";
+          }
 
-        if (response.data["result"] == "-3") {
-          response.data["result"] = "Wrong Answer on test " + testcase;
-          this.judgetype = "danger";
-          clearInterval(this.$store.state.submittimer);
-          if (testcase == "?")
-            response.data["result"] = "Wrong Answer"
-        }
+          if (response.data["result"] == "-3") {
+            response.data["result"] = "Wrong Answer on test " + testcase;
+            this.judgetype = "danger";
+            clearInterval(this.$store.state.submittimer);
+            if (testcase == "?")
+              response.data["result"] = "Wrong Answer"
+          }
 
-        if (response.data["result"] == "-4") {
-          response.data["result"] = "Compile Error";
-          this.judgetype = "warning";
-          clearInterval(this.$store.state.submittimer);
-        }
+          if (response.data["result"] == "-4") {
+            response.data["result"] = "Compile Error";
+            this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
+          }
 
-        if (response.data["result"] == "-5") {
-          response.data["result"] = "Presentation Error on test " + testcase;
-          this.judgetype = "warning";
-          clearInterval(this.$store.state.submittimer);
-          if (testcase == "?")
-            response.data["result"] = "Presentation Error"
-        }
+          if (response.data["result"] == "-5") {
+            response.data["result"] = "Presentation Error on test " + testcase;
+            this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
+            if (testcase == "?")
+              response.data["result"] = "Presentation Error"
+          }
 
-        if (response.data["result"] == "-6") {
-          response.data["result"] = "Waiting";
-          this.loadingshow = true;
-          this.judgetype = "info";
-        }
+          if (response.data["result"] == "-6") {
+            response.data["result"] = "Waiting";
+            this.loadingshow = true;
+            this.judgetype = "info";
+          }
 
-        if (response.data["result"] == "0") {
-          response.data["result"] = "Accepted";
-          this.judgetype = "success";
-          clearInterval(this.$store.state.submittimer);
-        }
+          if (response.data["result"] == "0") {
+            response.data["result"] = "Accepted";
+            this.judgetype = "success";
+            clearInterval(this.$store.state.submittimer);
+          }
 
-        if (response.data["result"] == "1") {
-          response.data["result"] = "Time Limit Exceeded on test " + testcase;
-          this.judgetype = "warning";
-          clearInterval(this.$store.state.submittimer);
-          if (testcase == "?")
-            response.data["result"] = "Time Limit Exceeded"
-        }
+          if (response.data["result"] == "1") {
+            response.data["result"] = "Time Limit Exceeded on test " + testcase;
+            this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
+            if (testcase == "?")
+              response.data["result"] = "Time Limit Exceeded"
+          }
 
-        if (response.data["result"] == "2") {
-          response.data["result"] = "Time Limit Exceeded on test " + testcase;
-          this.judgetype = "warning";
-          clearInterval(this.$store.state.submittimer);
-          if (testcase == "?")
-            response.data["result"] = "Time Limit Exceeded"
-        }
+          if (response.data["result"] == "2") {
+            response.data["result"] = "Time Limit Exceeded on test " + testcase;
+            this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
+            if (testcase == "?")
+              response.data["result"] = "Time Limit Exceeded"
+          }
 
-        if (response.data["result"] == "3") {
-          response.data["result"] = "Memory Limit Exceeded on test " + testcase;
-          this.judgetype = "warning";
-          clearInterval(this.$store.state.submittimer);
-          if (testcase == "?")
-            response.data["result"] = "Memory Limit Exceeded"
-        }
+          if (response.data["result"] == "3") {
+            response.data["result"] = "Memory Limit Exceeded on test " + testcase;
+            this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
+            if (testcase == "?")
+              response.data["result"] = "Memory Limit Exceeded"
+          }
 
-        if (response.data["result"] == "4") {
-          response.data["result"] = "Runtime Error on test " + testcase;
-          this.judgetype = "warning";
-          clearInterval(this.$store.state.submittimer);
-          if (testcase == "?")
-            response.data["result"] = "Runtime Error"
-        }
+          if (response.data["result"] == "4") {
+            response.data["result"] = "Runtime Error on test " + testcase;
+            this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
+            if (testcase == "?")
+              response.data["result"] = "Runtime Error"
+          }
 
-        if (response.data["result"] == "5") {
-          response.data["result"] = "System Error";
-          this.judgetype = "danger";
-          clearInterval(this.$store.state.submittimer);
-        }
+          if (response.data["result"] == "5") {
+            response.data["result"] = "System Error";
+            this.judgetype = "danger";
+            clearInterval(this.$store.state.submittimer);
+          }
 
-        this.submitbuttontext = response.data["result"];
-        this.$refs["Statusmini"].reflash()
-      });
+          this.submitbuttontext = response.data["result"];
+          this.$refs["Statusmini"].reflash()
+        });
     }
-  },
+  }
+  ,
   destroyed() {
     clearInterval(this.$store.state.submittimer);
   }
-};
+}
+;
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

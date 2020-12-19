@@ -117,11 +117,8 @@ export default {
       ac: 100,
       mle: 100,
       tle: 100,
-      rte: 100,
-      pe: 100,
-      ce: 100,
       wa: 100,
-      se: 100,
+      re: 100,
       title: "Statistics",
       // currenttag: "",
       /* islpoj: true, */
@@ -331,24 +328,20 @@ export default {
     //   if (type == "ExtremelyHard") return "danger";
     // },
     changestatistices: function (row, column, cell, event) {
+      console.log("enter changestatistices");
+      console.log(row);
       if (row.submission == 0) {
         this.ac = 0;
         this.mle = 0;
         this.tle = 0;
-        this.rte = 0;
-        this.pe = 0;
-        this.ce = 0;
         this.wa = 0;
-        this.se = 0;
+        this.re = 0;
       } else {
         this.ac = parseFloat(((row.ac * 100) / row.submission).toFixed(2));
         this.mle = parseFloat(((row.mle * 100) / row.submission).toFixed(2));
         this.tle = parseFloat(((row.tle * 100) / row.submission).toFixed(2));
-        this.rte = parseFloat(((row.rte * 100) / row.submission).toFixed(2));
-        this.pe = parseFloat(((row.pe * 100) / row.submission).toFixed(2));
-        this.ce = parseFloat(((row.ce * 100) / row.submission).toFixed(2));
         this.wa = parseFloat(((row.wa * 100) / row.submission).toFixed(2));
-        this.se = parseFloat(((row.se * 100) / row.submission).toFixed(2));
+        this.re = parseFloat(((row.re * 100) / row.submission).toFixed(2));
       }
       this.title = row.title;
       this.$refs.prosta.setdata(this.$data);
