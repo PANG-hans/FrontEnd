@@ -10,11 +10,11 @@ export default {
 
   data() {
     return {
-      languagelist: ["TODO"]
+      languagelist: ["MySQL","SQlite","postgreSql"]
     };
   },
   created() {
-
+    console.log("languageselect");
     var sb = this.$store.state.sb
     if( sb ==undefined){
       this.$axios
@@ -22,7 +22,7 @@ export default {
       .then(res => {
         if (res.data.length > 0) {
           this.languagelist = res.data[0].openlanguage.split("|");
-        } 
+        }
         this.$store.state.sb = res.data
       })
       .catch(error => {
@@ -34,7 +34,7 @@ export default {
     else{
       if (sb.length > 0) {
           this.languagelist = sb[0].openlanguage.split("|");
-        } 
+        }
     }
 
   },

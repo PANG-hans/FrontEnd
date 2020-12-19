@@ -72,9 +72,10 @@ export default {
     }
   },
   mounted() {
-  
+
   var sb = this.$store.state.sb
     if( sb ==undefined){
+      console.log("teamchart");
       this.$axios
       .get("/settingboard/")
       .then(res => {
@@ -92,7 +93,7 @@ export default {
       if (sb.length > 0) this.label.school = sb[0].schoolname;
         else this.label.school = "University";
     }
-      
+
     this.$axios
       .get("/teamboard/")
       .then(response => {

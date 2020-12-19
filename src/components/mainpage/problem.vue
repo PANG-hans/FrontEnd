@@ -354,9 +354,12 @@ export default {
       this.$refs.prosta.setdata(this.$data);
     },
     problemclick: function (row, column, cell, event) {
+      console.log("problemclick");
+      console.log("what is in row?" + row);
       this.$router.push({
         name: "problemdetail",
-        query: { problemID: row.problem }
+        //query: { problemID: row.problem }
+        query: { problemID:row.programOrder }
       });
     }
   },
@@ -390,7 +393,7 @@ export default {
         //     response.data.results[i]["tag"] = ["无"];
         //   else
         //     response.data.results[i]["tag"] = response.data.results[i][
-        //       "tag"    
+        //       "tag"
         //     ].split("|");
         // }
         this.tableData = response.data;

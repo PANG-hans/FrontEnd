@@ -4,16 +4,26 @@
       <el-row>
         <el-card shadow="always">
           <el-row :gutter="18"
-                  id="title">{{this.proid+" "}}{{title}}</el-row>
+                  id="title">{{ this.proid + " " }}{{ title }}
+          </el-row>
           <br>
           <img :src="'data:image/jpeg;base64,'+imgcode"
                class="img-responsive" v-if="imgcode!=''">
           <el-row :gutter="18"
-                  id="des">Desciption</el-row>
+                  id="des">Description
+          </el-row>
           <el-row :gutter="18"
                   id="detail">
             <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                 v-html="input"></div></el-row>
+                 v-html="input"></div>
+            <div>
+<!--              <VueMarkdown style="margin-right:50px;word-break:break-all;white-space:pre-line;"-->
+<!--                           v-html="detail_markdown">-->
+<!--              </VueMarkdown>-->
+            </div>
+            153654{{ detail }}
+          </el-row>
+          <br>
         </el-card>
       </el-row>
       <el-row>
@@ -21,7 +31,8 @@
           <el-row :gutter="15">
             <el-col :span="3">
               <div id="des"
-                   style="padding: 5px 10px;">Language:</div>
+                   style="padding: 5px 10px;">Language:
+              </div>
             </el-col>
             <el-col :span="2">
               <el-select v-model="language"
@@ -33,12 +44,14 @@
             <el-col :span="2">
               <el-button type="primary"
                          @click="submit"
-                         style="font-weight:bold;margin-left:10px;">Submit</el-button>
+                         style="font-weight:bold;margin-left:10px;">Submit
+              </el-button>
             </el-col>
             <el-col :span="2">
               <el-button type="primary"
                          @click="code = ''"
-                         style="font-weight:bold;margin-left:10px;">Reset</el-button>
+                         style="font-weight:bold;margin-left:10px;">Reset
+              </el-button>
             </el-col>
 
             <el-col :span="15">
@@ -46,7 +59,8 @@
                          :type="judgetype"
                          :loading="loadingshow"
                          style="font-weight:bold;margin-left:10px;"
-                         @click="showdialog">{{submitbuttontext}}</el-button>
+                         @click="showdialog">{{ submitbuttontext }}
+              </el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -67,7 +81,7 @@
                 <font color="deepskyblue"
                       size="4">Time:</font>
               </template>
-              <div>{{time}}</div>
+              <div>{{ time }}</div>
             </el-collapse-item>
             <el-collapse-item name="5"
                               id="des">
@@ -75,9 +89,17 @@
                 <font color="deepskyblue"
                       size="4">Memory:</font>
               </template>
-              <div>{{memory}}</div>
+              <div>{{ memory }}</div>
             </el-collapse-item>
-            <el-collapse-item name="6"
+            <el-collapse-item name="5"
+                              id="des">
+              <template slot="title">
+                <font color="red"
+                      size="14">DDL:</font>
+              </template>
+              <div>{{ ddl }}</div>
+            </el-collapse-item>
+<!--            <el-collapse-item name="6"
                               id="des">
               <template slot="title">
                 <font color="deepskyblue"
@@ -89,8 +111,9 @@
                       size="medium"
                       type="info"
                       disable-transitions
-                      hit>{{ name }}</el-tag>
-            </el-collapse-item>
+                      hit>{{ name }}
+              </el-tag>
+            </el-collapse-item>-->
           </el-collapse>
         </el-card>
       </el-row>
@@ -114,10 +137,11 @@
 </style>
 <script>
 import moment from "moment";
-import { codemirror } from "vue-codemirror";
+import {codemirror} from "vue-codemirror";
 import statusmini from "@/components/utils/statusmini";
 import languageselect from "@/components/utils/languageselect";
 import prostatistice from "@/components/utils/prostatistice";
+
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
@@ -130,7 +154,7 @@ export default {
     prostatistice,
     languageselect
   },
-  data () {
+  data() {
     return {
       imgcode: "",
       ip: "",
@@ -142,7 +166,7 @@ export default {
         lineNumbers: true
       },
       title: "",
-      des: "",
+      mdfile: "#####TEST Index",
       input: "",
       output: "",
       sinput: ["", ""],
@@ -154,12 +178,13 @@ export default {
       /*source: "",*/
       time: "",
       memory: "",
+      ddl: "",
       hint: "",
       tagnames: [],
       activeNames: ["1", "2", "3", "4", "5", "6"],
       level: "Easy",
       code: "",
-      language: "TODO",
+      language: "CHOICE!",
 
       codetemplate: {},
 
@@ -185,11 +210,13 @@ export default {
       });
     }
   },
-  created () {
+  created() {
 
-    var myip = require('ip');
-    this.userip = myip.address();
+    //var myip = require('ip');
+    //this.userip = myip.address();
     this.ID = this.$route.query.problemID;
+    console.log(this.ID);
+    console.log(typeof this.ID);
     if (!this.ID) {
       this.$message.error("参数错误" + "(" + this.ID + ")");
       return;
@@ -208,10 +235,10 @@ export default {
       });
 
 
-
     this.$axios
-      .get("/problem/" + this.ID + "/")
+      .get("/problems/" + this.ID)
       .then(response => {
+        this.title = response.data.name;
         auth = response.data.auth;
         if ((auth == 2 || auth == 3) && (sessionStorage.type == 1 || sessionStorage.type == "")) {
           this.title = "非法访问！请在比赛中访问题目！";
@@ -219,91 +246,95 @@ export default {
           return;
         }
         this.proid = this.ID
-        this.des = response.data.des;
-        this.input = response.data.input;
+        //this.mdfile = "#####TEST Index";//
+        // this.detail_markdown = "#####TEST Index";
+        console.log(response.data.description);
+        this.des = response.data.description;
+        this.input = response.data.description;
         this.output = response.data.output;
-        this.sinput = response.data.sinput.split("|#)"); //分隔符
-        this.soutput = response.data.soutput.split("|#)");
-        this.author = response.data.author;
-        this.addtime = response.data["addtime"] = moment(
-          response.data["addtime"]
-        ).format("YYYY-MM-DD HH:mm:ss");
+        // this.sinput = response.data.sinput.split("|#)"); //分隔符
+        // this.soutput = response.data.soutput.split("|#)");
+        // this.author = response.data.author;
+        // this.addtime = response.data["addtime"] = moment(
+        //   response.data["addtime"]
+        // ).format("YYYY-MM-DD HH:mm:ss");
 
         /* this.oj = response.data.oj; */
         /*this.source = response.data.source;*/
         this.time = response.data.time + "MS";
+        this.ddl = moment(response.data.deadline).format("YYYY-MM-DD HH:MM");
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
 
-        var li = response.data.template.split("*****")
-        for (var i = 1; i < li.length; i += 2) {
-          this.codetemplate[li[i]] = li[i + 1]
-        }
+        // var li = response.data.template.split("*****")
+        // for (var i = 1; i < li.length; i += 2) {
+        //   this.codetemplate[li[i]] = li[i + 1]
+        // }
         this.code = this.codetemplate[this.language]
 
         /* if (this.oj != "LPOJ") {
           this.proid = this.source
         } */
 
-
-        this.$axios
-          .get("/problemdata/" + this.ID + "/")
-          .then(response => {
-            if (response.data["tag"] == null) response.data["tag"] = ["无"];
-            else response.data["tag"] = response.data["tag"].split("|");
-
-            if (response.data.submission == 0) {
-              this.ac = 0;
-              this.mle = 0;
-              this.tle = 0;
-              this.rte = 0;
-              this.pe = 0;
-              this.ce = 0;
-              this.wa = 0;
-              this.se = 0;
-            } else {
-              this.ac = parseFloat(
-                ((response.data.ac * 100) / response.data.submission).toFixed(2)
-              );
-              this.mle = parseFloat(
-                ((response.data.mle * 100) / response.data.submission).toFixed(
-                  2
-                )
-              );
-              this.tle = parseFloat(
-                ((response.data.tle * 100) / response.data.submission).toFixed(
-                  2
-                )
-              );
-              this.rte = parseFloat(
-                ((response.data.rte * 100) / response.data.submission).toFixed(
-                  2
-                )
-              );
-              this.pe = parseFloat(
-                ((response.data.pe * 100) / response.data.submission).toFixed(2)
-              );
-              this.ce = parseFloat(
-                ((response.data.ce * 100) / response.data.submission).toFixed(2)
-              );
-              this.wa = parseFloat(
-                ((response.data.wa * 100) / response.data.submission).toFixed(2)
-              );
-              this.se = parseFloat(
-                ((response.data.se * 100) / response.data.submission).toFixed(2)
-              );
-            }
-
-            this.title = response.data.title;
-            this.tagnames = response.data.tag;
-            this.$refs.prosta.setdata(this.$data)
-            console.log(this.$refs["Statusmini"])
-            this.$refs["Statusmini"].setstatus(this.ID, sessionStorage.username, "");
-
-          })
-          .catch(error => {
-            this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
-          });
+        // TODO
+        // this.$axios
+        //   .get("/problemdata/" + this.ID + "/")
+        //   .then(response => {
+        //     if (response.data["tag"] == null) response.data["tag"] = ["无"];
+        //     else response.data["tag"] = response.data["tag"].split("|");
+        //
+        //     if (response.data.submission == 0) {
+        //       this.ac = 0;
+        //       this.mle = 0;
+        //       this.tle = 0;
+        //       this.rte = 0;
+        //       this.pe = 0;
+        //       this.ce = 0;
+        //       this.wa = 0;
+        //       this.se = 0;
+        //     } else {
+        //       this.ac = parseFloat(
+        //         ((response.data.ac * 100) / response.data.submission).toFixed(2)
+        //       );
+        //       this.mle = parseFloat(
+        //         ((response.data.mle * 100) / response.data.submission).toFixed(
+        //           2
+        //         )
+        //       );
+        //       this.tle = parseFloat(
+        //         ((response.data.tle * 100) / response.data.submission).toFixed(
+        //           2
+        //         )
+        //       );
+        //       this.rte = parseFloat(
+        //         ((response.data.rte * 100) / response.data.submission).toFixed(
+        //           2
+        //         )
+        //       );
+        //       this.pe = parseFloat(
+        //         ((response.data.pe * 100) / response.data.submission).toFixed(2)
+        //       );
+        //       this.ce = parseFloat(
+        //         ((response.data.ce * 100) / response.data.submission).toFixed(2)
+        //       );
+        //       this.wa = parseFloat(
+        //         ((response.data.wa * 100) / response.data.submission).toFixed(2)
+        //       );
+        //       this.se = parseFloat(
+        //         ((response.data.se * 100) / response.data.submission).toFixed(2)
+        //       );
+        //     }
+        //
+        //     this.title = response.data.title;
+        //     this.tagnames = response.data.tag;
+        //     this.$refs.prosta.setdata(this.$data)
+        //     console.log(this.$refs["Statusmini"])
+        //     this.$refs["Statusmini"].setstatus(this.ID, sessionStorage.username, "");
+        //
+        //   })
+        //   .catch(error => {
+        //     this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+        //   });
       })
       .catch(error => {
         this.title = "非法访问！请在比赛中访问题目！";
@@ -311,11 +342,11 @@ export default {
       });
   },
   methods: {
-    showdialog () {
+    showdialog() {
       if (this.submitid != -1)
         this.$refs["Statusmini"].showdialog(this.submitid)
     },
-    changetemplate (lang) {
+    changetemplate(lang) {
       var t = this.codetemplate[lang]
       if (t) {
         this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
@@ -330,7 +361,7 @@ export default {
 
 
     },
-    reRender () {
+    reRender() {
       if (window.MathJax) {
         console.log('rendering mathjax');
         MathJax.Hub.Config({
@@ -342,11 +373,11 @@ export default {
         window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
       }
     },
-    onCopy (e) {
+    onCopy(e) {
       this.$message.success("复制成功！");
     },
     // 复制失败
-    onError (e) {
+    onError(e) {
       this.$message.error("复制失败：" + e);
     },
     problemlevel: function (type) {
@@ -388,47 +419,43 @@ export default {
           type: "success",
           message: "提交中..."
         });
-        this.$axios.get("/currenttime/").then(response2 => {
-         // console.log(this.userip);
-          var curtime = response2.data;
+        //this.$axios.get("/currenttime/").then(response2 => {
+          // console.log(this.userip);
+          //var curtime = response2.data;
           //this.$axios.get("/")
           this.$axios
-            .post("/commit/query", {
-              user: sessionStorage.username,
+            .post("/commit/query/" + this.ID, {
+              username: sessionStorage.username,
               /* oj: this.oj, */
-              problem: this.ID,
-              result: -1,
-              time: 0,
-              memory: 0,
-              length: this.code.length,
-              language: this.language,
-              submittime: curtime,
-              judger: "waiting for judger",
-              contest: 0,
-              code: this.code,
-              testcase: 0,
+              questionId: this.ID,
+              language: 1,
+              commitCode: this.code,
+              testOrRun: 0,
               /* message: this.oj == "LPOJ" ? "0" : (this.proid + ""),
               problemtitle: (this.oj == "LPOJ" ? "LPOJ" : "") + (this.oj == "LPOJ" ? ' - ' : "") + (this.oj == "LPOJ" ? this.proid : "") + ' ' + this.title, */
-              rating: parseInt(sessionStorage.rating),
-              ip: this.userip
+            },{
+              headers: {
+                'token': sessionStorage.getItem("token"),
+              }
             })
             .then(response => {
               this.$message({
                 message: "提交成功！",
                 type: "success"
               });
-              clearInterval(this.$store.state.submittimer);
-              this.submitid = response.data.id;
-              this.submitbuttontext = "Pending";
-              this.judgetype = "info";
-              this.loadingshow = true;
+              // clearInterval(this.$store.state.submittimer);
+              // this.submitid = response.data.id;
+              this.submitbuttontext = response.data.commitLog.state;
+              this.judgetype = "";
+              // this.loadingshow = true;
+
               //创建一个全局定时器，定时刷新状态
-              this.$store.state.submittimer = setInterval(this.timer, 3000);
+              // this.$store.state.submittimer = setInterval(this.timer, 3000);
             })
             .catch(error => {
               this.$message.error("服务器错误！" + "(请检查编码（代码需要utf-8编码）或联系管理员)");
             });
-        });
+        //});
       });
     },
     timer: function () {
@@ -525,7 +552,7 @@ export default {
       });
     }
   },
-  destroyed () {
+  destroyed() {
     clearInterval(this.$store.state.submittimer);
   }
 };
@@ -539,27 +566,32 @@ export default {
   margin-right: 13px;
   margin-bottom: 13px;
 }
+
 #title {
   color: dimgrey;
   left: 10px;
   font-size: 20px;
 }
+
 #des {
   color: deepskyblue;
   font-weight: bold;
   left: 20px;
   font-size: 20px;
 }
+
 #detail {
   left: 30px;
   font-size: 16px;
 }
+
 #text {
   font-weight: normal;
   font-size: 15px;
   white-space: pre-wrap;
   margin-right: 40px;
 }
+
 #data {
   left: 30px;
   padding: 5px 10px;
@@ -571,6 +603,7 @@ export default {
 .el-row {
   margin-bottom: 20px;
 }
+
 .img-responsive {
   display: inline-block;
   height: auto;

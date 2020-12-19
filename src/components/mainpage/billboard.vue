@@ -47,6 +47,7 @@ export default {
     };
   },
   created() {
+    console.log("billboard");
     this.setdata();
     var sb = this.$store.state.sb
     if(sb==undefined){

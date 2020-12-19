@@ -62,6 +62,7 @@ export default {
             sessionStorage.setItem("username", this.form.username);
             sessionStorage.setItem("name", response.data.name);
             sessionStorage.setItem("type", response.data.type);
+            sessionStorage.setItem("token", response.data.token);
 
             this.dialogLoginVisible = false;
             // server log the login informations , useless in there

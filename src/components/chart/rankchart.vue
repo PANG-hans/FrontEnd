@@ -104,6 +104,7 @@ export default {
     }
   },
   mounted() {
+    console.log("rankchart");
     var sb = this.$store.state.sb
     if( sb ==undefined){
       this.$axios
@@ -123,7 +124,7 @@ export default {
       if (sb.length > 0) this.label.school = sb[0].schoolname;
         else this.label.school = "University";
     }
-    
+
 
     this.$axios
       .get("/dailyboard/")

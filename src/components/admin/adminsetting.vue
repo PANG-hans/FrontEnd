@@ -101,6 +101,7 @@ export default {
     }, */
     click() {
       if (this.name == "无") {
+        console.log("adminsettings-post");
         this.$axios
           .post("/settingboard/", {
             schoolname: this.name,
@@ -122,6 +123,7 @@ export default {
             );
           });
       } else {
+        console.log("adminsettings-get");
         this.$axios
           .put("/settingboard/1/", {
             schoolname: this.name,
@@ -146,6 +148,7 @@ export default {
     }
   },
   created() {
+    console.log("adminsettings-get");
     this.$axios
       .get("/settingboard/")
       .then(res => {
