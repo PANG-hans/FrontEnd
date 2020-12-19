@@ -49,13 +49,14 @@ export default {
           password: pas
         })
         .then(response => {
-          /* if (response.data == "passworderror") {
+           if (response.data == "passworderror") {
             this.$message.error("密码错误");
             return;
-          } */
+          }
           this.$message({
             message: "登录成功！",
-            type: "success"
+            type: "success",
+
           });
 
           sessionStorage.setItem("username", this.form.username);
@@ -91,9 +92,7 @@ export default {
               );
               sessionStorage.setItem("username", "");
               sessionStorage.setItem("name", "");
-              sessionStorage.setItem("rating", "");
               sessionStorage.setItem("type", "");
-              sessionStorage.setItem("acpro", "");
             });
         })
         .catch(error => {
