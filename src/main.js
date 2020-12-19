@@ -27,7 +27,7 @@ Vue.prototype.$md5 = md5;
 //开启debug模式
 Vue.config.debug = true;
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = process.env.API_ROOT;
+axios.defaults.baseURL = 'http://localhost:8888';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 // backend address and port
 Vue.prototype.$axios = axios;
@@ -39,44 +39,44 @@ const store = new Vuex.Store({
   },
 })
 
-axios
-.get("/settingboard/")
-.then(res => {
-  store.state.sb = res.data
-});
+// axios
+// .get("/settingboard/")
+// .then(res => {
+//   store.state.sb = res.data
+// });
 
 
-if (sessionStorage.username != ""&&sessionStorage.username!=undefined) {
-  //获取一下用户的AC题目，全局保存。
-  axios
-    .get("/userdata/?username=" + sessionStorage.username)
-    .then(response => {
-      sessionStorage.setItem("rating", response.data[0].rating);
-      var acpro = response.data[0].acpro.split("|")
-      acpro.shift() //因为最前面会多出一个空，去掉它
-      store.state.acpro = acpro
-      sessionStorage.setItem("acpro", acpro);
-    });
-    //更新一下本地的rating，如果没有登录则刷新一下，更新成功返回updated，否则返回ok
-  axios
-    .get("/updaterating/")
-    .then(response => {
-      if (response.data == "ok") {
-        sessionStorage.setItem("username", "");
-        sessionStorage.setItem("name", "");
-        sessionStorage.setItem("rating", "");
-        sessionStorage.setItem("type", "");
-        sessionStorage.setItem("acpro", "");
-        router.go(0)
-      }
-    });
-} else {
-  sessionStorage.setItem("username", "");
-  sessionStorage.setItem("name", "");
-  sessionStorage.setItem("rating", "");
-  sessionStorage.setItem("type", "");
-  sessionStorage.setItem("acpro", "");
-}
+// if (sessionStorage.username != ""&&sessionStorage.username!=undefined) {
+//   //获取一下用户的AC题目，全局保存。
+//   axios
+//     .get("/userdata/?username=" + sessionStorage.username)
+//     .then(response => {
+//       sessionStorage.setItem("rating", response.data[0].rating);
+//       var acpro = response.data[0].acpro.split("|")
+//       acpro.shift() //因为最前面会多出一个空，去掉它
+//       store.state.acpro = acpro
+//       sessionStorage.setItem("acpro", acpro);
+//     });
+//     //更新一下本地的rating，如果没有登录则刷新一下，更新成功返回updated，否则返回ok
+//   axios
+//     .get("/updaterating/")
+//     .then(response => {
+//       if (response.data == "ok") {
+//         sessionStorage.setItem("username", "");
+//         sessionStorage.setItem("name", "");
+//         sessionStorage.setItem("rating", "");
+//         sessionStorage.setItem("type", "");
+//         sessionStorage.setItem("acpro", "");
+//         router.go(0)
+//       }
+//     });
+// } else {
+//   sessionStorage.setItem("username", "");
+//   sessionStorage.setItem("name", "");
+//   sessionStorage.setItem("rating", "");
+//   sessionStorage.setItem("type", "");
+//   sessionStorage.setItem("acpro", "");
+// }
 
 
 

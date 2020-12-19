@@ -93,8 +93,10 @@ export default {
   created() {
     this.username = this.$route.query.username;
     if (this.username) {
+      // this api want to get a
       this.$axios.get("/user/?username=" + this.username).then(response => {
         this.name = response.data[0].name;
+        // this is useless
       });
 
       this.$axios.get("/userdata/?username=" + this.username).then(response => {

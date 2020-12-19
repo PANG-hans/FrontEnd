@@ -20,26 +20,26 @@
                   @cell-mouse-enter="changestatistices"
                   @cell-click="problemclick"
                   size="small">
-          <el-table-column prop="problem"
+          <el-table-column prop="programOrder"
                            label="ID"
                            :width="170"></el-table-column>
-          <el-table-column prop="title"
+          <el-table-column prop="name"
                            label="Title"
                            :width="400"></el-table-column>
-          <el-table-column prop="level"
-                           label="Level"
-                           :width="170">
-            <template slot-scope="scope1">
-              <el-tag id="leveltag"
-                      size="medium"
-                      :type="problemlevel(scope1.row.level)"
-                      disable-transitions
-                      hit>{{ scope1.row.level }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="rate"
-                           label="A/S"
-                           :width="200"></el-table-column>
+<!--          <el-table-column prop="level"-->
+<!--                           label="Level"-->
+<!--                           :width="170">-->
+<!--            <template slot-scope="scope1">-->
+<!--              <el-tag id="leveltag"-->
+<!--                      size="medium"-->
+<!--                      :type="problemlevel(scope1.row.level)"-->
+<!--                      disable-transitions-->
+<!--                      hit>{{ scope1.row.level }}</el-tag>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column prop="rate"-->
+<!--                           label="A/S"-->
+<!--                           :width="200"></el-table-column>-->
           <!-- <el-table-column prop="tag"
                            label="Tag">
             <template slot-scope="scope">
@@ -113,7 +113,7 @@ export default {
       pagesize: 15,
       totalproblem: 10,
       tableData: [],
-      tagnames: [],
+      // tagnames: [],
       ac: 100,
       mle: 100,
       tle: 100,
@@ -123,11 +123,11 @@ export default {
       wa: 100,
       se: 100,
       title: "Statistics",
-      currenttag: "",
+      // currenttag: "",
       /* islpoj: true, */
       searchtext: "",
       /* searchoj: "LPOJ" */
-      searchoj: ""
+      // searchoj: ""
     };
   },
   methods: {
@@ -143,178 +143,178 @@ export default {
       this.currentpage = 1;
       this.$axios
         .get(
-          "/problemdata/?limit=" +
-          this.pagesize +
-          "&offset=" +
-          (this.currentpage - 1) * this.pagesize +
-          "&auth=1&search=" +
-          this.searchtext
+          "/problems"
+          // this.pagesize +
+          // "&offset=" +
+          // (this.currentpage - 1) * this.pagesize +
+          // "&auth=1&search=" +
+          // this.searchtext
           /* +"&oj=" + this.searchoj */
-          +"&oj=" + this.searchoj
+          // +"&oj=" + this.searchoj
         )
         .then(response => {
-          for (var i = 0; i < response.data.results.length; i++) {
-
-            response.data.results[i]["rate"] =
-              response.data.results[i]["ac"] +
-              "/" +
-              response.data.results[i]["submission"];
-
-            if (response.data.results[i]["tag"] == null)
-              response.data.results[i]["tag"] = ["无"];
-            else
-              response.data.results[i]["tag"] = response.data.results[i][
-                "tag"
-              ].split("|");
-          }
+          // for (var i = 0; i < response.data.results.length; i++) {
+          //
+          //   response.data.results[i]["rate"] =
+          //     response.data.results[i]["ac"] +
+          //     "/" +
+          //     response.data.results[i]["submission"];
+          //
+          //   if (response.data.results[i]["tag"] == null)
+          //     response.data.results[i]["tag"] = ["无"];
+          //   else
+          //     response.data.results[i]["tag"] = response.data.results[i][
+          //       "tag"
+          //     ].split("|");
+          // }
           this.tableData = response.data.results;
           this.totalproblem = response.data.count;
         });
     },
-    tagclick (name) {
-      if (this.currenttag.indexOf(name) >= 0) {
-        this.$refs[name][0].type = "default";
-        var li = this.currenttag.split("+");
-        for (var i = 0; i < li.length; i++) {
-          if (li[i] == name) {
-            li.splice(i, 1);
-            break;
-          }
-        }
-        this.currenttag = li.join("+");
-      } else {
-        this.$refs[name][0].type = "primary";
-        var li = this.currenttag.split("+");
-        li.push(name);
-        this.currenttag = li.join("+");
-      }
-      this.searchtext = this.currenttag;
-      this.currentpage = 1;
-      this.$axios
-        .get(
-          "/problemdata/?limit=" +
-          this.pagesize +
-          "&offset=" +
-          (this.currentpage - 1) * this.pagesize +
-          "&auth=1&search=" +
-          this.searchtext
-          /* +"&oj=" + this.searchoj */
-          +"&oj=" + this.searchoj
-        )
-        .then(response => {
-          for (var i = 0; i < response.data.results.length; i++) {
-            if (response.data.results[i]["level"] == "1")
-              response.data.results[i]["level"] = "Easy";
-            if (response.data.results[i]["level"] == "2")
-              response.data.results[i]["level"] = "Medium";
-            if (response.data.results[i]["level"] == "3")
-              response.data.results[i]["level"] = "Hard";
-            if (response.data.results[i]["level"] == "4")
-              response.data.results[i]["level"] = "VeryHard";
-            if (response.data.results[i]["level"] == "5")
-              response.data.results[i]["level"] = "ExtremelyHard";
-
-            response.data.results[i]["rate"] =
-              response.data.results[i]["ac"] +
-              "/" +
-              response.data.results[i]["submission"];
-
-            if (response.data.results[i]["tag"] == null)
-              response.data.results[i]["tag"] = ["无"];
-            else
-              response.data.results[i]["tag"] = response.data.results[i][
-                "tag"
-              ].split("|");
-          }
-          this.tableData = response.data.results;
-          this.totalproblem = response.data.count;
-        });
-    },
-    handleSizeChange (val) {
-      this.pagesize = val;
-
-      this.$axios
-        .get(
-          "/problemdata/?limit=" +
-          this.pagesize +
-          "&offset=" +
-          (this.currentpage - 1) * this.pagesize +
-          "&auth=1&search=" +
-          this.searchtext
-          /* +"&oj=" + this.searchoj */
-          +"&oj=" + this.searchoj
-        )
-        .then(response => {
-          for (var i = 0; i < response.data.results.length; i++) {
-            if (response.data.results[i]["level"] == "1")
-              response.data.results[i]["level"] = "Easy";
-            if (response.data.results[i]["level"] == "2")
-              response.data.results[i]["level"] = "Medium";
-            if (response.data.results[i]["level"] == "3")
-              response.data.results[i]["level"] = "Hard";
-            if (response.data.results[i]["level"] == "4")
-              response.data.results[i]["level"] = "VeryHard";
-            if (response.data.results[i]["level"] == "5")
-              response.data.results[i]["level"] = "ExtremelyHard";
-
-            response.data.results[i]["rate"] =
-              response.data.results[i]["ac"] +
-              "/" +
-              response.data.results[i]["submission"];
-
-            if (response.data.results[i]["tag"] == null)
-              response.data.results[i]["tag"] = ["无"];
-            else
-              response.data.results[i]["tag"] = response.data.results[i][
-                "tag"
-              ].split("|");
-          }
-          this.tableData = response.data.results;
-          this.totalproblem = response.data.count;
-        });
-    },
-    handleCurrentChange (val) {
-      this.currentpage = val;
-      this.$axios
-        .get(
-          "/problemdata/?limit=" +
-          this.pagesize +
-          "&offset=" +
-          (this.currentpage - 1) * this.pagesize +
-          "&auth=1&search=" +
-          this.searchtext/*  +
-          "&oj=" + this.searchoj */
-          +"&oj=" + this.searchoj
-        )
-        .then(response => {
-          for (var i = 0; i < response.data.results.length; i++) {
-            if (response.data.results[i]["level"] == "1")
-              response.data.results[i]["level"] = "Easy";
-            if (response.data.results[i]["level"] == "2")
-              response.data.results[i]["level"] = "Medium";
-            if (response.data.results[i]["level"] == "3")
-              response.data.results[i]["level"] = "Hard";
-            if (response.data.results[i]["level"] == "4")
-              response.data.results[i]["level"] = "VeryHard";
-            if (response.data.results[i]["level"] == "5")
-              response.data.results[i]["level"] = "ExtremelyHard";
-
-            response.data.results[i]["rate"] =
-              response.data.results[i]["ac"] +
-              "/" +
-              response.data.results[i]["submission"];
-
-            if (response.data.results[i]["tag"] == null)
-              response.data.results[i]["tag"] = ["无"];
-            else
-              response.data.results[i]["tag"] = response.data.results[i][
-                "tag"
-              ].split("|");
-          }
-          this.tableData = response.data.results;
-          this.totalproblem = response.data.count;
-        });
-    },
+    // tagclick (name) {
+    //   if (this.currenttag.indexOf(name) >= 0) {
+    //     this.$refs[name][0].type = "default";
+    //     var li = this.currenttag.split("+");
+    //     for (var i = 0; i < li.length; i++) {
+    //       if (li[i] == name) {
+    //         li.splice(i, 1);
+    //         break;
+    //       }
+    //     }
+    //     this.currenttag = li.join("+");
+    //   } else {
+    //     this.$refs[name][0].type = "primary";
+    //     var li = this.currenttag.split("+");
+    //     li.push(name);
+    //     this.currenttag = li.join("+");
+    //   }
+    //   this.searchtext = this.currenttag;
+    //   this.currentpage = 1;
+    //   this.$axios
+    //     .get(
+    //       "/problemdata/?limit=" +
+    //       this.pagesize +
+    //       "&offset=" +
+    //       (this.currentpage - 1) * this.pagesize +
+    //       "&auth=1&search=" +
+    //       this.searchtext
+    //       /* +"&oj=" + this.searchoj */
+    //       +"&oj=" + this.searchoj
+    //     )
+    //     .then(response => {
+    //       for (var i = 0; i < response.data.results.length; i++) {
+    //         if (response.data.results[i]["level"] == "1")
+    //           response.data.results[i]["level"] = "Easy";
+    //         if (response.data.results[i]["level"] == "2")
+    //           response.data.results[i]["level"] = "Medium";
+    //         if (response.data.results[i]["level"] == "3")
+    //           response.data.results[i]["level"] = "Hard";
+    //         if (response.data.results[i]["level"] == "4")
+    //           response.data.results[i]["level"] = "VeryHard";
+    //         if (response.data.results[i]["level"] == "5")
+    //           response.data.results[i]["level"] = "ExtremelyHard";
+    //
+    //         response.data.results[i]["rate"] =
+    //           response.data.results[i]["ac"] +
+    //           "/" +
+    //           response.data.results[i]["submission"];
+    //
+    //         if (response.data.results[i]["tag"] == null)
+    //           response.data.results[i]["tag"] = ["无"];
+    //         else
+    //           response.data.results[i]["tag"] = response.data.results[i][
+    //             "tag"
+    //           ].split("|");
+    //       }
+    //       this.tableData = response.data.results;
+    //       this.totalproblem = response.data.count;
+    //     });
+    // },
+    // handleSizeChange (val) {
+    //   this.pagesize = val;
+    //
+    //   this.$axios
+    //     .get(
+    //       "/problemdata/?limit=" +
+    //       this.pagesize +
+    //       "&offset=" +
+    //       (this.currentpage - 1) * this.pagesize +
+    //       "&auth=1&search=" +
+    //       this.searchtext
+    //       /* +"&oj=" + this.searchoj */
+    //       // +"&oj=" + this.searchoj
+    //     )
+    //     .then(response => {
+    //       // for (var i = 0; i < response.data.results.length; i++) {
+    //       //   if (response.data.results[i]["level"] == "1")
+    //       //     response.data.results[i]["level"] = "Easy";
+    //       //   if (response.data.results[i]["level"] == "2")
+    //       //     response.data.results[i]["level"] = "Medium";
+    //       //   if (response.data.results[i]["level"] == "3")
+    //       //     response.data.results[i]["level"] = "Hard";
+    //       //   if (response.data.results[i]["level"] == "4")
+    //       //     response.data.results[i]["level"] = "VeryHard";
+    //       //   if (response.data.results[i]["level"] == "5")
+    //       //     response.data.results[i]["level"] = "ExtremelyHard";
+    //       //
+    //       //   response.data.results[i]["rate"] =
+    //       //     response.data.results[i]["ac"] +
+    //       //     "/" +
+    //       //     response.data.results[i]["submission"];
+    //       //
+    //       //   if (response.data.results[i]["tag"] == null)
+    //       //     response.data.results[i]["tag"] = ["无"];
+    //       //   else
+    //       //     response.data.results[i]["tag"] = response.data.results[i][
+    //       //       "tag"
+    //       //     ].split("|");
+    //       // }
+    //       this.tableData = response.data.results;
+    //       this.totalproblem = response.data.count;
+    //     });
+    // },
+    // handleCurrentChange (val) {
+    //   this.currentpage = val;
+    //   this.$axios
+    //     .get(
+    //       "/problemdata/?limit=" +
+    //       this.pagesize +
+    //       "&offset=" +
+    //       (this.currentpage - 1) * this.pagesize +
+    //       "&auth=1&search=" +
+    //       this.searchtext/*  +
+    //       // "&oj=" + this.searchoj */
+    //       // +"&oj=" + this.searchoj
+    //     )
+    //     .then(response => {
+    //       // for (var i = 0; i < response.data.results.length; i++) {
+    //       //   if (response.data.results[i]["level"] == "1")
+    //       //     response.data.results[i]["level"] = "Easy";
+    //       //   if (response.data.results[i]["level"] == "2")
+    //       //     response.data.results[i]["level"] = "Medium";
+    //       //   if (response.data.results[i]["level"] == "3")
+    //       //     response.data.results[i]["level"] = "Hard";
+    //       //   if (response.data.results[i]["level"] == "4")
+    //       //     response.data.results[i]["level"] = "VeryHard";
+    //       //   if (response.data.results[i]["level"] == "5")
+    //       //     response.data.results[i]["level"] = "ExtremelyHard";
+    //       //
+    //       //   response.data.results[i]["rate"] =
+    //       //     response.data.results[i]["ac"] +
+    //       //     "/" +
+    //       //     response.data.results[i]["submission"];
+    //       //
+    //       //   if (response.data.results[i]["tag"] == null)
+    //       //     response.data.results[i]["tag"] = ["无"];
+    //       //   else
+    //       //     response.data.results[i]["tag"] = response.data.results[i][
+    //       //       "tag"
+    //       //     ].split("|");
+    //       // }
+    //       this.tableData = response.data.results;
+    //       this.totalproblem = response.data.count;
+    //     });
+    // },
     tableRowClassName ({ row, rowIndex }) {
       var acpro = this.$store.state.acpro;
       if (acpro)
@@ -323,13 +323,13 @@ export default {
         }
       return "";
     },
-    problemlevel: function (type) {
-      if (type == "Easy") return "info";
-      if (type == "Medium") return "success";
-      if (type == "Hard") return "";
-      if (type == "VeryHard") return "warning";
-      if (type == "ExtremelyHard") return "danger";
-    },
+    // problemlevel: function (type) {
+    //   if (type == "Easy") return "info";
+    //   if (type == "Medium") return "success";
+    //   if (type == "Hard") return "";
+    //   if (type == "VeryHard") return "warning";
+    //   if (type == "ExtremelyHard") return "danger";
+    // },
     changestatistices: function (row, column, cell, event) {
       if (row.submission == 0) {
         this.ac = 0;
@@ -363,67 +363,70 @@ export default {
   mounted () {
     this.$axios
     /* .get("/problemdata/?limit=15&offset=0&auth=1&oj=LPOJ") */
-    .get("/problemdata/?limit=15&offset=0&auth=1&oj")
+    .get("/problems")
     .then(response => {
 
-        console.log(response.data);
-        for (var i = 0; i < response.data.results.length; i++) {
-          if (response.data.results[i]["level"] == "1")
-            response.data.results[i]["level"] = "Easy";
-          if (response.data.results[i]["level"] == "2")
-            response.data.results[i]["level"] = "Medium";
-          if (response.data.results[i]["level"] == "3")
-            response.data.results[i]["level"] = "Hard";
-          if (response.data.results[i]["level"] == "4")
-            response.data.results[i]["level"] = "VeryHard";
-          if (response.data.results[i]["level"] == "5")
-            response.data.results[i]["level"] = "ExtremelyHard";
-
-          response.data.results[i]["rate"] =
-            response.data.results[i]["ac"] +
-            "/" +
-            response.data.results[i]["submission"];
-
-          if (response.data.results[i]["tag"] == null)
-            response.data.results[i]["tag"] = ["无"];
-          else
-            response.data.results[i]["tag"] = response.data.results[i][
-              "tag"
-            ].split("|");
-        }
-        this.tableData = response.data.results;
-        this.totalproblem = response.data.count;
+      console.log(response.data);
+      console.log(response.data.result);
+      console.log(response.data.count);
+        // for (var i = 0; i < response.data.results.length; i++) {
+        //   if (response.data.results[i]["level"] == "1")
+        //     response.data.results[i]["level"] = "Easy";
+        //   if (response.data.results[i]["level"] == "2")
+        //     response.data.results[i]["level"] = "Medium";
+        //   if (response.data.results[i]["level"] == "3")
+        //     response.data.results[i]["level"] = "Hard";
+        //   if (response.data.results[i]["level"] == "4")
+        //     response.data.results[i]["level"] = "VeryHard";
+        //   if (response.data.results[i]["level"] == "5")
+        //     response.data.results[i]["level"] = "ExtremelyHard";
+        //
+        //   response.data.results[i]["rate"] =
+        //     response.data.results[i]["ac"] +
+        //     "/" +
+        //     response.data.results[i]["submission"];
+        //
+        //   if (response.data.results[i]["tag"] == null)
+        //     response.data.results[i]["tag"] = ["无"];
+        //   else
+        //     response.data.results[i]["tag"] = response.data.results[i][
+        //       "tag"    
+        //     ].split("|");
+        // }
+        this.tableData = response.data;
+        this.totalproblem=3; // fake number
+        // this.totalproblem = response.data.count;
       });
 
-    this.$axios.get("/problemtag/").then(response => {
-      for (var i = 0; i < response.data.length; i++)
-        this.tagnames.push(response.data[i]["tagname"]);
-    });
+    // this.$axios.get("/problemtag/").then(response => {
+    //   for (var i = 0; i < response.data.length; i++)
+    //     this.tagnames.push(response.data[i]["tagname"]);
+    // });
   }
 };
 </script>
 
 
 <style scope>
-#leveltag {
-  text-align: center;
-  font-weight: bold;
-}
-#protag {
-  text-align: center;
-  font-weight: bold;
-  margin-right: 7px;
-  margin-bottom: 7px;
-}
-#tag {
-  text-align: center;
-  font-weight: bold;
-  margin-left: 2px;
-  margin-bottom: 5px;
-}
-.el-row {
-  margin-bottom: 20px;
-}
+/*#leveltag {*/
+/*  text-align: center;*/
+/*  font-weight: bold;*/
+/*}*/
+/*#protag {*/
+/*  text-align: center;*/
+/*  font-weight: bold;*/
+/*  margin-right: 7px;*/
+/*  margin-bottom: 7px;*/
+/*}*/
+/*#tag {*/
+/*  text-align: center;*/
+/*  font-weight: bold;*/
+/*  margin-left: 2px;*/
+/*  margin-bottom: 5px;*/
+/*}*/
+/*.el-row {*/
+/*  margin-bottom: 20px;*/
+/*}*/
 .el-table .acrow {
   background: #c7ffb8;
 }

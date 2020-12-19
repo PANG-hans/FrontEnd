@@ -83,7 +83,7 @@ export default {
       this.dialogRegisterVisible = true;
     },
     registerClick() {
-      if (this.form.password != this.form.comfirm) {
+      if (this.form.password !== this.form.comfirm) {
         this.$message.error("两次密码不一致！");
         return;
       }
@@ -143,6 +143,7 @@ export default {
           });
           this.dialogRegisterVisible = false;
           this.form.password = "";
+          this.$router.go(0);
         })
         .catch((error) => {
           this.$message.error(

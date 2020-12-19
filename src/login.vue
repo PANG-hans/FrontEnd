@@ -63,12 +63,12 @@ export default {
             sessionStorage.setItem("name", response.data.name);
             sessionStorage.setItem("type", response.data.type);
 
-
             this.dialogLoginVisible = false;
             // server log the login informations , useless in there
             if (this.$store.state.loginip === "" || this.$store.state.loginip === undefined) {
               this.$store.state.loginip = "chrome" // 后台会处理
             }
+            this.$router.go(0);
             // this.$axios
             //   .post("/setlogindata/", {
             //     username: this.form.username,

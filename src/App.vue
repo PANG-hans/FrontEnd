@@ -116,12 +116,12 @@ export default {
       school: "SUSTech",
       loginshow: sessionStorage.username,
       username: sessionStorage.username,
-      name: sessionStorage.name,
+        name: sessionStorage.username,
       isadmin: false
     };
   },
   mounted () {
-    this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
+    this.isadmin = sessionStorage.type === 2 || sessionStorage.type === 3;
 
     var sb = this.$store.state.sb
 

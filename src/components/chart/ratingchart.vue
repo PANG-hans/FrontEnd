@@ -20,7 +20,7 @@ export default {
     };
   },
   methods: {
-    
+
     initChart() {
       let myChart = echarts.init(this.$refs.myEchart);
       let a= this.Xcontest
@@ -117,7 +117,8 @@ export default {
     }
   },
   mounted() {
-    var username = this.$route.query.username
+    return;
+    var username = this.$route.query.username;
     this.$axios
       .get("/contestratingchange/?user="+username)
       .then(response => {
@@ -142,7 +143,7 @@ export default {
 
         for (var i = 0; i < response.data.length; i++) {
           for (var j = 0; j < this.series.length; j++) {
-      
+
             if (this.series[j].name == response.data[i]["user"]) {
               this.series[j].data.push(response.data[i].currentrating)
               this.Xcontest.push(response.data[i].contestname)
