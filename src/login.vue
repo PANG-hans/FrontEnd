@@ -49,6 +49,7 @@ export default {
           password: pas
         })
         .then(response => {
+
             /* if (response.data == "passworderror") {
               this.$message.error("密码错误");
               return;

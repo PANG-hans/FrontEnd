@@ -171,7 +171,7 @@ export default {
           params: { username: sessionStorage.username }
         });
       }
-      if (command === "submitting") {
+      if (command === "submittion") {
         this.$router.push({
           name: "statue",
           query: { username: sessionStorage.username }
@@ -182,7 +182,7 @@ export default {
           name: "admin"
         });
       }
-      if (command == "classes") {
+      if (command === "classes") {
         this.$router.push({
           name: "classes"
         });
