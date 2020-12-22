@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="dialogVisible" width="80%" :append-to-body="true">
       <el-alert
         title="Program Message:"
-        :type="compilemsg=='编译成功！'?'success':'warning'"
+        :type="'success'"
         :description="compilemsg"
         :closable="false"
         show-icon
@@ -14,14 +14,17 @@
           size="mini"
           v-clipboard:copy="code"
           v-clipboard:success="onCopy"
-          v-clipboard:error="onError"
-        >Copy</el-button>
+          v-clipboard:error="onError">Copy
+        </el-button>
         <el-button
           size="mini"
-          @click="downloadFile(curid,code)"
-        >Download</el-button>
+          @click="downloadFile(curid,code)">Download
+        </el-button>
+        <el-tag>内存: {{ memoryCostOfThisCommitResult }} KB</el-tag>
+        <el-tag>时间: {{ timeCostOfThisCommitResult }} MS</el-tag>
+        <el-tag>状态: {{ stateofThisCommitResult }}</el-tag>
       </el-alert>
-      <codemirror v-model="code" :options="cmOptions"></codemirror>
+      <codemirror v-model="code" :options="cmOptions">1145141919810</codemirror>
 
       <el-collapse>
         <el-collapse-item :key="index" v-for="(data,index) in dialogdata" v-if="data.casedata!=''">
@@ -33,7 +36,7 @@
               v-show="data.casedata!=''"
             >
               <template slot="title">
-                <b>{{' '+data.caseresult + ' on test ' + data.casetitle}}</b>
+                <b>{{ ' ' + data.caseresult + ' on test ' + data.casetitle }}</b>
               </template>
             </el-alert>
           </template>
@@ -46,25 +49,28 @@
             <h5
               style="white-space:pre;margin-left:15px;"
               v-if="data.casedata!=''"
-            >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
+            >{{ 'Time: ' + data.casetime + 'MS' + ' Memory: ' + data.casememory + 'MB' }}</h5>
             <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Test Input:</h5>
             <div
 
               style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
               v-if="data.casedata!=''"
-            >{{data.casedata+'\n'}}</div>
+            >{{ data.casedata + '\n' }}
+            </div>
 
             <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Your Output:</h5>
             <div
               style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
               v-if="data.casedata!=''"
-            >{{data.caseuseroutput+'\n'}}</div>
+            >{{ data.caseuseroutput + '\n' }}
+            </div>
 
             <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Expected Output:</h5>
             <div
               style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
               v-if="data.casedata!=''"
-            >{{data.caseoutputdata+'\n'}}</div>
+            >{{ data.caseoutputdata + '\n' }}
+            </div>
           </el-alert>
         </el-collapse-item>
       </el-collapse>
@@ -125,16 +131,18 @@
 </style>
 
 
-
 <script>
 import moment from "moment";
-import { codemirror } from "vue-codemirror";
+import {codemirror} from "vue-codemirror";
+
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
+const loadshLibiary = require('lodash');
 
 export default {
   name: "statuemini",
+
   components: {
     codemirror
   },
@@ -146,53 +154,41 @@ export default {
     onError(e) {
       this.$message.error("复制失败：" + e);
     },
-    showdialog(id,result){
-      this.dialogdata = [];
-      this.code = "";
-
+    showdialog(id, result) {
+      //this.dialogdata = [];
+      this.code = '';
+      this.stateofThisCommitResult = result;
+      const compiled = loadshLibiary.template('/commit/judgestatuscode/<%= commitLogId %>')
+      ({'commitLogId': id});
+      console.log("statusmini showidalog");
       this.$axios
-        .get("/judgestatuscode/" + id + "/")
+        .post(compiled,
+          {'username': sessionStorage.getItem('username'), 'handInId': 114514},
+          {
+            headers: {'token': sessionStorage.getItem("token"),}
+          }
+        )
         .then(response => {
-          this.code = response.data.code;
-          this.curid = id
-          if(response.data.language=="Python2") this.curlang = 'py'
-          if(response.data.language=="Python3") this.curlang = 'py'
-          if(response.data.language=="C++") this.curlang = 'cpp'
-          if(response.data.language=="C") this.curlang = 'c'
-          if(response.data.language=="Java") this.curlang = 'java'
-          if(response.data.language=="Swift5.1") this.curlang = 'swift'
-
-          this.compilemsg = "编译成功！"
-          if (result!="Accepted")
-            this.compilemsg = result
-          if (response.data.message + "" != "0") this.compilemsg = response.data.message
-
-          this.$axios.get("/casestatus/?statusid=" + id).then(res => {
-            for (var i = 0; i < res.data.length; i++) {
-              this.dialogdata.push({
-                caseresult: res.data[i]["result"],
-                casedata: res.data[i]["casedata"],
-                casetime: res.data[i]["time"],
-                casememory: res.data[i]["memory"],
-                casetitle: res.data[i]["testcase"],
-                caseuseroutput: res.data[i]["useroutput"],
-                caseoutputdata: res.data[i]["outputdata"]
-              });
-            }
-          });
+          const responseData = response.data;
+          this.memoryCostOfThisCommitResult = responseData['ramsize'];
+          this.timeCostOfThisCommitResult = responseData['cputime'];
+          this.code = responseData['code'];
+          console.log(compiled);
+          console.log(responseData);
         })
         .catch(error => {
-          this.code = "无权限查看！" + error;
+          this.code = "出现错误!!" + error;
         });
-
       this.dialogVisible = true;
     },
 
     rowClick(row, col, e) {
+      console.log(row);
+      console.log("rowClick");
       this.showdialog(row.id, row.result)
     },
 
-    tableRowClassName({ row, rowIndex }) {
+    tableRowClassName({row, rowIndex}) {
       if (row.result == "Pending") return "info-row";
       if (row.result == "Judging") return "judging-row";
       if (row.result == "Wrong Answer") return "danger-row";
@@ -207,7 +203,7 @@ export default {
       if (row.result == "System Error") return "warning-row";
       return "";
     },
-    statuetype: function(type) {
+    statuetype: function (type) {
       if (type == "Pending") return "info";
       if (type == "Judging") return "";
       if (type == "Wrong Answer") return "danger";
@@ -223,7 +219,7 @@ export default {
 
       return "danger";
     },
-    statuejudge: function(type) {
+    statuejudge: function (type) {
       if (type == "Pending") return true;
       if (type == "Judging") return true;
       if (type == "Wrong Answer") return false;
@@ -240,82 +236,48 @@ export default {
     },
 
     setstatus(problem, username, contest) {
-      this.tableData=[]
-      this.problem = problem
-      this.username = username
-      this.contest = contest
+      console.log("this setstatus");
+      this.tableData = [];
+      this.problemId = this.$route.query.problemID;
+      this.problem = problem;
+      this.username = username;
+      this.contest = contest;
       this.reflash()
     },
 
-    reflash(){
-      if(this.username==""||this.username==undefined)
-        this.username="|#))"
+    reflash() {
+      console.log("enter reflash of statusmini");
       this.$axios
-        .get(
-          "/judgestatus/?user=" +
-            this.username +
-            "&problem=" +
-            this.problem +
-            "&contest=" +
-            this.contest
-        )
+        .post(
+          loadshLibiary.template('/commit/history/<%= questionId %>')({'questionId': this.problemId}),
+          {'username': sessionStorage.getItem('username')},
+          {
+            headers: {'token': sessionStorage.getItem("token"),}
+          })
         .then(response => {
-          for (var i = 0; i < response.data.length; i++) {
-            var testcase = response.data[i]["testcase"];
-
-            response.data[i]["submittime"] = moment(
-              response.data[i]["submittime"]
-            ).format("YYYY-MM-DD");
-
-            if (response.data[i]["result"] == "-1") {
-              response.data[i]["result"] = "Pending";
-            }
-
-            if (response.data[i]["result"] == "-2") {
-              response.data[i]["result"] = "Judging";
-            }
-
-            if (response.data[i]["result"] == "-3")
-              response.data[i]["result"] = "Wrong Answer";
-
-            if (response.data[i]["result"] == "-4")
-              response.data[i]["result"] = "Compile Error";
-
-            if (response.data[i]["result"] == "-5")
-              response.data[i]["result"] = "Presentation Error";
-
-            if (response.data[i]["result"] == "-6") {
-              response.data[i]["result"] = "Waiting";
-            }
-
-            if (response.data[i]["result"] == "0")
-              response.data[i]["result"] = "Accepted";
-
-            if (response.data[i]["result"] == "1")
-              response.data[i]["result"] = "Time Limit Exceeded";
-
-            if (response.data[i]["result"] == "2")
-              response.data[i]["result"] = "Time Limit Exceeded";
-
-            if (response.data[i]["result"] == "3")
-              response.data[i]["result"] = "Memory Limit Exceeded";
-
-            if (response.data[i]["result"] == "4")
-              response.data[i]["result"] = "Runtime Error";
-
-            if (response.data[i]["result"] == "5")
-              response.data[i]["result"] = "System Error";
+          console.log(response);
+          let will_setToTableData = [];
+          for (let i = 0; i < response.data.length; i++) {
+            const responseElement = response.data[i];
+            const tableDataOneElement = {
+              'id': responseElement['commitLogId'],
+              'result': responseElement['state'],
+              'submittime': moment(responseElement["seconds"] * 1000).format('YYYY-MM-DD HH:MM'),
+            };
+            will_setToTableData.push(tableDataOneElement);
           }
-          this.tableData = response.data;
+          this.tableData = will_setToTableData;
         });
     },
     downloadFile(codeid, content) {
-      var aLink = document.createElement("a");
-      var blob = new Blob([content], { type: "data:text/plain" });
-      var downloadElement = document.createElement("a");
-      var href = window.URL.createObjectURL(blob); //创建下载的链接
+      const tempDate = new Date();
+      const timeStrOfNow = moment(tempDate.getTime()).format("YYYY-MM-DD_HH:mm:ss");
+      const aLink = document.createElement("a");
+      const blob = new Blob([content], {type: "data:text/plain"});
+      const downloadElement = document.createElement("a");
+      const href = window.URL.createObjectURL(blob); //创建下载的链接
       downloadElement.href = href;
-      downloadElement.download = codeid + '.' + this.curlang; //下载后文件名
+      downloadElement.download = loadshLibiary.template('<%= name %>.sql')({'name': timeStrOfNow});
       document.body.appendChild(downloadElement);
       downloadElement.click(); //点击下载
       document.body.removeChild(downloadElement); //下载完成移除元素
@@ -331,21 +293,23 @@ export default {
         theme: "base16-light",
         lineNumbers: true,
         readOnly: true,
-        viewportMargin:Infinity,
-        lineWrapping:true,
+        viewportMargin: Infinity,
+        lineWrapping: true,
       },
       tableData: [],
 
       problem: -1,
       username: "",
-      contest:"",
-      curid:0,
-      curlang:'cpp',
+      contest: "",
+      curid: 0,
+      curlang: 'sql',
       dialogVisible: false,
       code: "",
-      compilemsg: "无权限查看！",
+      compilemsg: "Commit History",
       dialogdata: [],
-      
+      memoryCostOfThisCommitResult: 0,
+      timeCostOfThisCommitResult: 0,
+      stateofThisCommitResult: 'AC'
     };
   },
   created() {

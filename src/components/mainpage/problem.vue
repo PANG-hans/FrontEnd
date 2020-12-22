@@ -14,7 +14,6 @@
                        :page-size="pagesize"
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="totalproblem"></el-pagination>
-
         <el-table :data="tableData"
                   :row-class-name="tableRowClassName"
                   @cell-mouse-enter="changestatistices"
@@ -26,20 +25,20 @@
           <el-table-column prop="name"
                            label="Title"
                            :width="400"></el-table-column>
-<!--          <el-table-column prop="level"-->
-<!--                           label="Level"-->
-<!--                           :width="170">-->
-<!--            <template slot-scope="scope1">-->
-<!--              <el-tag id="leveltag"-->
-<!--                      size="medium"-->
-<!--                      :type="problemlevel(scope1.row.level)"-->
-<!--                      disable-transitions-->
-<!--                      hit>{{ scope1.row.level }}</el-tag>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column prop="rate"-->
-<!--                           label="A/S"-->
-<!--                           :width="200"></el-table-column>-->
+          <!--          <el-table-column prop="level"-->
+          <!--                           label="Level"-->
+          <!--                           :width="170">-->
+          <!--            <template slot-scope="scope1">-->
+          <!--              <el-tag id="leveltag"-->
+          <!--                      size="medium"-->
+          <!--                      :type="problemlevel(scope1.row.level)"-->
+          <!--                      disable-transitions-->
+          <!--                      hit>{{ scope1.row.level }}</el-tag>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <!--          <el-table-column prop="rate"-->
+          <!--                           label="A/S"-->
+          <!--                           :width="200"></el-table-column>-->
           <!-- <el-table-column prop="tag"
                            label="Tag">
             <template slot-scope="scope">
@@ -103,11 +102,14 @@
 <script>
 prostatistice;
 import prostatistice from "@/components/utils/prostatistice";
+
+const loadshLibiary = require('lodash');
+
 export default {
   components: {
     prostatistice
   },
-  data () {
+  data() {
     return {
       currentpage: 1,
       pagesize: 15,
@@ -128,7 +130,7 @@ export default {
     };
   },
   methods: {
-    statuechange (val) {
+    statuechange(val) {
       /* if (val == true) {
         this.searchoj = "LPOJ"
       } else {
@@ -136,7 +138,7 @@ export default {
       } */
       this.searchtitle()
     },
-    searchtitle () {
+    searchtitle() {
       this.currentpage = 1;
       this.$axios
         .get(
@@ -312,7 +314,7 @@ export default {
     //       this.totalproblem = response.data.count;
     //     });
     // },
-    tableRowClassName ({ row, rowIndex }) {
+    tableRowClassName({row, rowIndex}) {
       var acpro = this.$store.state.acpro;
       if (acpro)
         if (acpro.indexOf(row.problem + "") != -1) {
@@ -328,23 +330,6 @@ export default {
     //   if (type == "ExtremelyHard") return "danger";
     // },
     changestatistices: function (row, column, cell, event) {
-      console.log("enter changestatistices");
-      console.log(row);
-      if (row.submission == 0) {
-        this.ac = 0;
-        this.mle = 0;
-        this.tle = 0;
-        this.wa = 0;
-        this.re = 0;
-      } else {
-        this.ac = parseFloat(((row.ac * 100) / row.submission).toFixed(2));
-        this.mle = parseFloat(((row.mle * 100) / row.submission).toFixed(2));
-        this.tle = parseFloat(((row.tle * 100) / row.submission).toFixed(2));
-        this.wa = parseFloat(((row.wa * 100) / row.submission).toFixed(2));
-        this.re = parseFloat(((row.re * 100) / row.submission).toFixed(2));
-      }
-      this.title = row.title;
-      this.$refs.prosta.setdata(this.$data);
     },
     problemclick: function (row, column, cell, event) {
       console.log("problemclick");
@@ -352,19 +337,18 @@ export default {
       this.$router.push({
         name: "problemdetail",
         //query: { problemID: row.problem }
-        query: { problemID:row.programOrder }
+        query: {problemID: row.programOrder}
       });
     }
   },
-  mounted () {
+  mounted() {
     this.$axios
-    /* .get("/problemdata/?limit=15&offset=0&auth=1&oj=LPOJ") */
-    .get("/problems")
-    .then(response => {
-
-      console.log(response.data);
-      console.log(response.data.result);
-      console.log(response.data.count);
+      /* .get("/problemdata/?limit=15&offset=0&auth=1&oj=LPOJ") */
+      .get("/problems")
+      .then(response => {
+        console.log(response.data);
+        console.log(response.data.result);
+        console.log(response.data.count);
         // for (var i = 0; i < response.data.results.length; i++) {
         //   if (response.data.results[i]["level"] == "1")
         //     response.data.results[i]["level"] = "Easy";
@@ -390,16 +374,48 @@ export default {
         //     ].split("|");
         // }
         this.tableData = response.data;
-        this.totalproblem=3; // fake number
+        this.totalproblem = 3; // fake number
         // this.totalproblem = response.data.count;
       });
-
-    // this.$axios.get("/problemtag/").then(response => {
-    //   for (var i = 0; i < response.data.length; i++)
-    //     this.tagnames.push(response.data[i]["tagname"]);
-    // });
+    this.$axios
+      .get('/persona/all/all')
+      .then(response => {
+        console.log(response);
+        let transferObject = {'ac': 0, 'wa': 0, 'mle': 0, 'tle': 0, 're': 0, 'title': 'Not Any Submission'};
+        if (response.data['submission'] !== 0) {
+          const tobeDivideNumber = response.data['submission'];
+          const parseFloatToNumber = function (inData, divideNumber) {
+            return parseFloat(((inData * 100) / divideNumber).toFixed(2));
+          }
+          this.ac = parseFloatToNumber(response.data.ac, tobeDivideNumber);
+          this.mle = parseFloatToNumber(response.data.mle, tobeDivideNumber);
+          this.tle = parseFloatToNumber(response.data.tle, tobeDivideNumber);
+          this.wa = parseFloatToNumber(response.data.wa, tobeDivideNumber);
+          this.re = parseFloatToNumber(response.data.re, tobeDivideNumber);
+          transferObject = {
+            'ac': this.ac,
+            'wa': this.wa,
+            'mle': this.mle,
+            'tle': this.tle,
+            're': this.re,
+            'title': 'Statusmini'
+          }
+          console.log(this.re);
+        }
+        // console.log(this.$data);
+        // //this.$refs.prosta.setdata(this.$data)
+        // console.log(this.$refs["Statusmini"])
+        // console.log(this.ID);
+        // console.log(sessionStorage.username);
+        // response.data["title"] = "Statusmini";
+        this.$refs.prosta.setdata(transferObject);
+      })
+      .catch(error => {
+        this.$message.error(loadshLibiary.template('服务器错误！/<%= WrongInfo %>')({'WrongInfo': error.response}));
+      });
   }
-};
+}
+;
 </script>
 
 

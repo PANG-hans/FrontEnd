@@ -280,29 +280,38 @@ export default {
               {headers: {'token': sessionStorage.getItem("token"),}}
             )
             .then(response => {
-              if (response.data['submission'] === 0) {
-                this.ac = 0;
-                this.wa = 0;
-                this.mle = 0;
-                this.tle = 0;
-                this.re = 0;
-              } else {
-                this.ac = parseFloat(((response.data.ac * 100) / response.data['submission']).toFixed(2));
-                this.mle = parseFloat(((response.data.mle * 100) / response.data['submission']).toFixed(2));
-                this.tle = parseFloat(((response.data.tle * 100) / response.data['submission']).toFixed(2));
-                this.wa = parseFloat(((response.data.wa * 100) / response.data['submission']).toFixed(2));
-                this.re = parseFloat(((response.data.re * 100) / response.data['submission']).toFixed(2));
+              let transferObject = {'ac': 0, 'wa': 0, 'mle': 0, 'tle': 0, 're': 0, 'title': 'Not Any Submission'};
+              if (response.data['submission'] !== 0) {
+                const tobeDivideNumber = response.data['submission'];
+                let parseFloatToNumber = function (inData, divideNumber) {
+                  return parseFloat(((inData * 100) / divideNumber).toFixed(2))
+                }
+                this.ac = parseFloatToNumber(response.data.ac, tobeDivideNumber);
+                this.mle = parseFloatToNumber(response.data.mle, tobeDivideNumber);
+                this.tle = parseFloatToNumber(response.data.tle, tobeDivideNumber);
+                this.wa = parseFloatToNumber(response.data.wa, tobeDivideNumber);
+                this.re = parseFloatToNumber(response.data.re, tobeDivideNumber);
+                transferObject = {
+                  'ac': this.ac,
+                  'wa': this.wa,
+                  'mle': this.mle,
+                  'tle': this.tle,
+                  're': this.re,
+                  'title': 'Statusmini'
+                }
                 console.log(this.re);
               }
-              console.log(this.$data);
-              //this.$refs.prosta.setdata(this.$data)
-              console.log(this.$refs["Statusmini"])
-              console.log(this.ID);
-              console.log(sessionStorage.username);
-              this.$refs["Statusmini"].setstatus(this.ID, sessionStorage.username, "");
+              // console.log(this.$data);
+              // //this.$refs.prosta.setdata(this.$data)
+              // console.log(this.$refs["Statusmini"])
+              // console.log(this.ID);
+              // console.log(sessionStorage.username);
+              // response.data["title"] = "Statusmini";
+              this.$refs.prosta.setdata(transferObject);
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+              this.$message.error(loadshLibiary.template('服务器错误！/<%= WrongInfo %>')({'WrongInfo': error.response}));
+              this.$message.error('请检查是否登录!!!');
             });
           // this.$axios
           //   .get("/problemdata/" + this.ID + "/")
@@ -431,6 +440,7 @@ export default {
     }
     ,
     submit: function () {
+      this.submitbuttontext = 'Judgeing...';
       /*if (this.addtime == "") {
         this.$message.error("非法操作！");
         return;
@@ -496,6 +506,7 @@ export default {
           })
           .catch(error => {
             this.$message.error("服务器错误！" + "(请检查编码（代码需要utf-8编码）或联系管理员)");
+            this.submitbuttontext = 'error';
           });
         //});
       });
@@ -595,7 +606,7 @@ export default {
           }
 
           this.submitbuttontext = response.data["result"];
-          this.$refs["Statusmini"].reflash()
+          this.$refs["Statusmini"].reflash(this.ID);
         });
     }
   }
