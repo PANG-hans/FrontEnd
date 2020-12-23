@@ -1,77 +1,77 @@
 <template>
   <el-card shadow="always"
            id="card">
-<!--    <el-dialog :visible.sync="dialogVisible"-->
-<!--               width="80%">-->
-<!--      <el-alert title="Program Message:"-->
-<!--                :type="compilemsg=='编译成功！'?'success':'warning'"-->
-<!--                :description="compilemsg"-->
-<!--                :closable="false"-->
-<!--                show-icon-->
-<!--                :show-close="false"></el-alert>-->
-<!--      <el-alert title="Code："-->
-<!--                type="info"-->
-<!--                :closable="false">-->
-<!--        <el-button size="mini"-->
-<!--                   v-clipboard:copy="code"-->
-<!--                   v-clipboard:success="onCopy"-->
-<!--                   v-clipboard:error="onError">Copy-->
-<!--        </el-button>-->
-<!--        &lt;!&ndash; <el-button size="mini"-->
-<!--                   @click="downloadFile(curid,code)">Download</el-button> &ndash;&gt;-->
-<!--        <el-button v-if="isadmin"-->
-<!--                   type="danger"-->
-<!--                   size="mini"-->
-<!--                   @click="deletestatus(curid)">Delete-->
-<!--        </el-button>-->
-<!--      </el-alert>-->
+    <!--    <el-dialog :visible.sync="dialogVisible"-->
+    <!--               width="80%">-->
+    <!--      <el-alert title="Program Message:"-->
+    <!--                :type="compilemsg=='编译成功！'?'success':'warning'"-->
+    <!--                :description="compilemsg"-->
+    <!--                :closable="false"-->
+    <!--                show-icon-->
+    <!--                :show-close="false"></el-alert>-->
+    <!--      <el-alert title="Code："-->
+    <!--                type="info"-->
+    <!--                :closable="false">-->
+    <!--        <el-button size="mini"-->
+    <!--                   v-clipboard:copy="code"-->
+    <!--                   v-clipboard:success="onCopy"-->
+    <!--                   v-clipboard:error="onError">Copy-->
+    <!--        </el-button>-->
+    <!--        &lt;!&ndash; <el-button size="mini"-->
+    <!--                   @click="downloadFile(curid,code)">Download</el-button> &ndash;&gt;-->
+    <!--        <el-button v-if="isadmin"-->
+    <!--                   type="danger"-->
+    <!--                   size="mini"-->
+    <!--                   @click="deletestatus(curid)">Delete-->
+    <!--        </el-button>-->
+    <!--      </el-alert>-->
 
-<!--      <codemirror id="mycode"-->
-<!--                  v-model="code"-->
-<!--                  :options="cmOptions"></codemirror>-->
-<!--      <el-collapse>-->
-<!--        <el-collapse-item :key="index"-->
-<!--                          v-for="(data,index) in dialogdata"-->
-<!--                          v-if="data.casedata!=''"-->
-<!--                          :class="data.caseresult=='Accepted'?'el-collapse-success':(data.caseresult=='Wrong Answer'?'el-collapse-error':'el-collapse-warning')">-->
-<!--          <template slot="title">-->
-<!--            <el-alert :show-icon="true"-->
-<!--                      :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"-->
-<!--                      :closable="false"-->
-<!--                      v-show="data.casedata!=''">-->
-<!--              <template slot="title">-->
-<!--                <b>{{ ' ' + data.caseresult + ' on test ' + data.casetitle }}</b>-->
-<!--              </template>-->
-<!--            </el-alert>-->
-<!--          </template>-->
-<!--          <el-alert :title="''"-->
-<!--                    :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"-->
-<!--                    :closable="false"-->
-<!--                    v-show="data.casedata!=''">-->
-<!--            <h5 style="white-space:pre;margin-left:15px;"-->
-<!--                v-if="data.casedata!=''">-->
-<!--              {{ 'Time: ' + data.casetime + 'MS' + ' Memory: ' + data.casememory + 'MB' }}</h5>-->
-<!--            <h5 style="white-space:pre;margin-left:15px;"-->
-<!--                v-if="data.casedata!=''">Test Input:</h5>-->
-<!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
-<!--                 v-if="data.casedata!=''">{{ data.casedata + '\n' }}-->
-<!--            </div>-->
+    <!--      <codemirror id="mycode"-->
+    <!--                  v-model="code"-->
+    <!--                  :options="cmOptions"></codemirror>-->
+    <!--      <el-collapse>-->
+    <!--        <el-collapse-item :key="index"-->
+    <!--                          v-for="(data,index) in dialogdata"-->
+    <!--                          v-if="data.casedata!=''"-->
+    <!--                          :class="data.caseresult=='Accepted'?'el-collapse-success':(data.caseresult=='Wrong Answer'?'el-collapse-error':'el-collapse-warning')">-->
+    <!--          <template slot="title">-->
+    <!--            <el-alert :show-icon="true"-->
+    <!--                      :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"-->
+    <!--                      :closable="false"-->
+    <!--                      v-show="data.casedata!=''">-->
+    <!--              <template slot="title">-->
+    <!--                <b>{{ ' ' + data.caseresult + ' on test ' + data.casetitle }}</b>-->
+    <!--              </template>-->
+    <!--            </el-alert>-->
+    <!--          </template>-->
+    <!--          <el-alert :title="''"-->
+    <!--                    :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"-->
+    <!--                    :closable="false"-->
+    <!--                    v-show="data.casedata!=''">-->
+    <!--            <h5 style="white-space:pre;margin-left:15px;"-->
+    <!--                v-if="data.casedata!=''">-->
+    <!--              {{ 'Time: ' + data.casetime + 'MS' + ' Memory: ' + data.casememory + 'MB' }}</h5>-->
+    <!--            <h5 style="white-space:pre;margin-left:15px;"-->
+    <!--                v-if="data.casedata!=''">Test Input:</h5>-->
+    <!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
+    <!--                 v-if="data.casedata!=''">{{ data.casedata + '\n' }}-->
+    <!--            </div>-->
 
-<!--            <h5 style="white-space:pre;margin-left:15px;"-->
-<!--                v-if="data.casedata!=''">Your Output:</h5>-->
-<!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
-<!--                 v-if="data.casedata!=''">{{ data.caseuseroutput + '\n' }}-->
-<!--            </div>-->
+    <!--            <h5 style="white-space:pre;margin-left:15px;"-->
+    <!--                v-if="data.casedata!=''">Your Output:</h5>-->
+    <!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
+    <!--                 v-if="data.casedata!=''">{{ data.caseuseroutput + '\n' }}-->
+    <!--            </div>-->
 
-<!--            <h5 style="white-space:pre;margin-left:15px;"-->
-<!--                v-if="data.casedata!=''">Expected Output:</h5>-->
-<!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
-<!--                 v-if="data.casedata!=''">{{ data.caseoutputdata + '\n' }}-->
-<!--            </div>-->
-<!--          </el-alert>-->
-<!--        </el-collapse-item>-->
-<!--      </el-collapse>-->
-<!--    </el-dialog>-->
+    <!--            <h5 style="white-space:pre;margin-left:15px;"-->
+    <!--                v-if="data.casedata!=''">Expected Output:</h5>-->
+    <!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
+    <!--                 v-if="data.casedata!=''">{{ data.caseoutputdata + '\n' }}-->
+    <!--            </div>-->
+    <!--          </el-alert>-->
+    <!--        </el-collapse-item>-->
+    <!--      </el-collapse>-->
+    <!--    </el-dialog>-->
 
     <el-dialog :visible.sync="searchdialogVisible">
       <el-form :model="searchform"
@@ -422,10 +422,10 @@ export default {
       // if (type == "Runtime Error") return "warning";
       // if (type == "System Error") return "danger";
       if (type == "AC") return "success";
-      if(type=="WA") return "danger";
-      if(type=="TLE") return "warning";
-      if(type=="MLE") return "warning";
-      if(type=="RE") return "danger";
+      if (type == "WA") return "danger";
+      if (type == "TLE") return "warning";
+      if (type == "MLE") return "warning";
+      if (type == "RE") return "danger";
 
       return "danger";
     },
@@ -567,7 +567,7 @@ export default {
             //
 
             response.data[i]["problemtitle"] = response.data[i]["problem"] + "-" + response.data[i]["table"];
-            response.data[i]["id"] = i.toString();
+            response.data[i]["id"] = response.data.length - i.toString();
           }
           this.tableData = response.data;
           console.log(this.tableData)
