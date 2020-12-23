@@ -15,16 +15,15 @@
                  :lazy="true">
       <adminmanageuser></adminmanageuser>
     </el-tab-pane>
-    <el-tab-pane label="Rejudge"
+    <!--    <el-tab-pane label="Rejudge"-->
+    <!--                 :lazy="true">-->
+    <!--      <adminrejudge></adminrejudge>-->
+    <!--    </el-tab-pane>-->
+    <!--    <el-tab-pane label="网站设置"-->
 
-                 :lazy="true">
-      <adminrejudge></adminrejudge>
-    </el-tab-pane>
-    <el-tab-pane label="网站设置"
-
-                 :lazy="true">
-      <adminsetting></adminsetting>
-    </el-tab-pane>
+    <!--                 :lazy="true">-->
+    <!--      <adminsetting></adminsetting>-->
+    <!--    </el-tab-pane>-->
   </el-tabs>
 </template>
 
@@ -58,7 +57,7 @@ export default {
     /* adminaddchoiceproblem, */
     /* adminchangechoiceproblem, */
   },
-  data () {
+  data() {
     return {
       type: 3,
       isadmin: false,
@@ -66,10 +65,8 @@ export default {
       loading: true
     };
   },
-  methods: {
-
-  },
-  created () {
+  methods: {},
+  created() {
     this.type = sessionStorage.type;
     /* if (this.type != 2 && this.type != 3) {
       this.$message.error("非法访问！");
@@ -81,7 +78,7 @@ export default {
       this.isadmin = true;
     } */
   },
-  mounted () {
+  mounted() {
     this.loading = false
   },
 };

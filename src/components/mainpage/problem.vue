@@ -7,24 +7,24 @@
                    active-text="LPOJ"
                    inactive-text="All"
                    @change="statuechange"></el-switch> -->
-        <el-pagination @size-change="handleSizeChange"
-                       @current-change="handleCurrentChange"
-                       :current-page="currentpage"
-                       :page-sizes="[15, 20, 30, 50]"
+        <el-pagination :current-page="currentpage"
                        :page-size="pagesize"
+                       :page-sizes="[15, 20, 30, 50]"
+                       :total="totalproblem"
                        layout="total, sizes, prev, pager, next, jumper"
-                       :total="totalproblem"></el-pagination>
+                       @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"></el-pagination>
         <el-table :data="tableData"
                   :row-class-name="tableRowClassName"
+                  size="small"
                   @cell-mouse-enter="changestatistices"
-                  @cell-click="problemclick"
-                  size="small">
-          <el-table-column prop="programOrder"
+                  @cell-click="problemclick">
+          <el-table-column :width="170"
                            label="ID"
-                           :width="170"></el-table-column>
-          <el-table-column prop="name"
+                           prop="programOrder"></el-table-column>
+          <el-table-column :width="400"
                            label="Title"
-                           :width="400"></el-table-column>
+                           prop="name"></el-table-column>
           <!--          <el-table-column prop="level"-->
           <!--                           label="Level"-->
           <!--                           :width="170">-->
@@ -55,13 +55,13 @@
                            :width="200"></el-table-column>-->
         </el-table>
         <center>
-          <el-pagination @size-change="handleSizeChange"
-                         @current-change="handleCurrentChange"
-                         :current-page="currentpage"
-                         :page-sizes="[15, 20, 30, 50]"
+          <el-pagination :current-page="currentpage"
                          :page-size="pagesize"
+                         :page-sizes="[15, 20, 30, 50]"
+                         :total="totalproblem"
                          layout="total, sizes, prev, pager, next, jumper"
-                         :total="totalproblem"></el-pagination>
+                         @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange"></el-pagination>
         </center>
       </el-card>
     </el-col>
@@ -71,17 +71,17 @@
           <prostatistice ref="prosta"></prostatistice>
         </el-col>
       </el-row>
-      <el-row>
-        <el-card shadow="always">
-          <el-input placeholder="Search..."
-                    v-model="searchtext"
-                    @keyup.native.enter="searchtitle">
-            <el-button slot="append"
-                       icon="el-icon-search"
-                       @click="searchtitle"></el-button>
-          </el-input>
-        </el-card>
-      </el-row>
+      <!--      <el-row>-->
+      <!--        <el-card shadow="always">-->
+      <!--          <el-input placeholder="Search..."-->
+      <!--                    v-model="searchtext"-->
+      <!--                    @keyup.native.enter="searchtitle">-->
+      <!--            <el-button slot="append"-->
+      <!--                       icon="el-icon-search"-->
+      <!--                       @click="searchtitle"></el-button>-->
+      <!--          </el-input>-->
+      <!--        </el-card>-->
+      <!--      </el-row>-->
       <!-- <el-row :gutter="15">
         <el-col>
           <el-card shadow="always">

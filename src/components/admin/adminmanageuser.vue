@@ -33,10 +33,12 @@
         <template slot-scope="scope">
           <el-button @click="userclick(scope.row)"
                      type="primary"
-                     size="small">编辑</el-button>
+                     size="small">编辑
+          </el-button>
           <el-button @click="gouser(scope.row)"
                      type="primary"
-                     size="small">查看</el-button>
+                     size="small">查看
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,7 +89,8 @@
         </el-col>
         <el-button type="success"
                    @click="checklogin"
-                   style="margin-left:20px;">查询登录记录</el-button>
+                   style="margin-left:20px;">查询登录记录
+        </el-button>
       </el-row>
 
       <el-row :gutter="10">
@@ -150,7 +153,8 @@
         </el-col>
         <el-button type="success"
                    @click="updateClick"
-                   style="float:right;margin-right:10px;">更新</el-button>
+                   style="float:right;margin-right:10px;">更新
+        </el-button>
       </el-row>
     </el-dialog>
   </el-form>
@@ -158,9 +162,10 @@
 
 <script>
 import moment from "moment";
+
 export default {
   name: "adminmanageuser",
-  data () {
+  data() {
     return {
       dialogDataVisible: false,
       dialogDataVisible2: false,
@@ -186,10 +191,10 @@ export default {
     };
   },
   methods: {
-    gouser (row) {
+    gouser(row) {
       window.open("/user?username=" + row.username);
     },
-    searchdata () {
+    searchdata() {
       this.datacurrentpage = 1;
       this.$axios
         .get(
@@ -210,7 +215,7 @@ export default {
           this.tableData2 = response.data.results;
         });
     },
-    handleDataCurrentChange (val) {
+    handleDataCurrentChange(val) {
       this.datacurrentpage = val;
       this.$axios
         .get(
@@ -229,18 +234,19 @@ export default {
           this.tableData2 = response.data.results;
         });
     },
-    checklogin () {
+    checklogin() {
       this.dialogDataVisible = true;
       this.searchlogin = this.form.username;
       this.searchdata();
     },
 
-    userclick (row) {
+    userclick(row) {
       this.form.username = row.username;
       this.usernamechange();
       this.dialogDataVisible2 = true;
     },
-    searchuserdata () {
+    searchuserdata() {
+      console.log("searchUserData in AdminManageuer");
       this.usercurrentpage = 1;
       this.$axios
         .get(
@@ -259,7 +265,8 @@ export default {
           this.tableData = response.data.results;
         });
     },
-    handleUserCurrentChange (val) {
+    handleUserCurrentChange(val) {
+      console.log(" handleUserCurrentChange in AdminManageuer");
       this.usercurrentpage = val;
       this.$axios
         .get(
@@ -279,7 +286,8 @@ export default {
         });
     },
 
-    usernamechange () {
+    usernamechange() {
+      console.log("userNameChange in AdminManageuer");
       if (this.form.username) {
         this.$axios
           .get("/user/?username=" + this.form.username)
@@ -299,7 +307,7 @@ export default {
       }
     },
 
-    updateClick () {
+    updateClick() {
       if (
         !this.form.name ||
         !this.form.number ||
@@ -351,8 +359,7 @@ export default {
         this.password = this.$md5(this.password);
 
         myform["password"] = this.password;
-      }
-      else {
+      } else {
         myform["password"] = "." //用于后台特判
       }
 
@@ -371,16 +378,19 @@ export default {
       );
     }
   },
-  created () {
-    this.$axios.get("/user/?limit=10&offset=0").then(response => {
-      for (let i = 0; i < response.data.results.length; i++) {
-        response.data.results[i].regtime = moment(
-          response.data.results[i].regtime
-        ).format("YYYY-MM-DD HH:mm:ss");
-      }
-      this.totaluser = response.data.count;
-      this.tableData = response.data.results;
-    });
+  created() {
+    console.log("created in AdminManageuer");
+    this.$axios
+      .get("/user/?limit=10&offset=0")
+      .then(response => {
+        for (let i = 0; i < response.data.results.length; i++) {
+          response.data.results[i].regtime = moment(
+            response.data.results[i].regtime
+          ).format("YYYY-MM-DD HH:mm:ss");
+        }
+        this.tableData = response.data;
+        this.totaluser = response.data.length;
+      });
   }
 };
 </script>

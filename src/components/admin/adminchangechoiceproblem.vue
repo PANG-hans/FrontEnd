@@ -49,7 +49,7 @@
 
     </el-table>
 
-    <el-dialog title="修改题目"
+    <el-dialog title="修改题目?"
                :visible.sync="dialogTableVisible"
                width="85%">
       <el-form :model="choiceproblemform"
@@ -98,7 +98,7 @@
         <el-form-item>
           <el-button type="success"
                      @click="AddChoiceProblemSubmit"
-                     style="float:left;">修改题目</el-button>
+                     style="float:left;">修改题目?</el-button>
         </el-form-item>
       </el-form>
 
