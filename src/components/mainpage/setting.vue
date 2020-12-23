@@ -22,7 +22,7 @@
           <div style="text-align:center;margin:5px;">新密码（不更改，请输入上次密码）</div>
         </el-col>
         <el-col :span="12">
-          <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
+          <el-input type="password" v-model="form.newPassword" autocomplete="off"></el-input>
         </el-col>
       </el-row>
       <el-row :gutter="10">
@@ -88,7 +88,7 @@ export default {
       name: "",
       form: {
         username: "",
-        password: "",
+        newPassword: "",
         comfirm: "",
         name: "",
         number: "",
@@ -99,6 +99,7 @@ export default {
   },
   methods: {
     updateClick() {
+      console.log(this.username);
       if (!this.username) {
         this.$message.error("非法访问！");
         return;
@@ -109,22 +110,22 @@ export default {
         this.$message.error("字段不能为空！");
         return;
       }
-      if (this.form.password != this.form.comfirm) {
+      if (this.form.newPassword != this.form.comfirm) {
         this.$message.error("两次密码不一致！");
         return;
       }
 
-      if (!this.form.password) {
+      if (!this.form.newPassword) {
         this.$message.error("请输入密码");
         return;
       }
 
-      if (this.form.password.length < 6) {
+      if (this.form.newPassword.length < 6) {
         this.$message.error("密码太短！");
         return;
       }
 
- this.$confirm(
+      this.$confirm(
         "确定更新吗?",
         {
           confirmButtonText: "确定",
@@ -133,44 +134,44 @@ export default {
         }
       ).then(() => {
 
-      this.form.password = this.$md5(this.form.password);
-      this.$axios
-        .post(
-          "/login/reset",
-          this.form
-        )
+        this.form.newPassword = this.$md5(this.form.newPassword);
+        this.$axios
+          .post(
+            "/login/reset",
+            this.form
+          )
 
-            .then(
-              response => {
-                this.$message({
-                  message: "更新成功！",
-                  type: "success"
-                });
-                sessionStorage.setItem("name", this.form.name);
-                this.$router.push({
-                  name: "user",
-                  query: { username: this.form.username }
-                });
-              },
-              response => {
-                this.$message.error("更新失败（" + response + "）");
-              }
-            );
+          .then(
+            response => {
+              this.$message({
+                message: "更新成功！",
+                type: "success"
+              });
+              sessionStorage.setItem("name", this.form.name);
+              this.$router.push({
+                name: "user",
+                query: {username: this.form.username}
+              });
+            },
+            response => {
+              this.$message.error("更新失败（" + response + "）");
+            }
+          );
 
       })
-
 
 
     }
   },
   created() {
-    this.username = this.$route.params.username;
+    this.username = sessionStorage.getItem('username');
     this.form.username = this.username;
+    console.log(this.username);
     if (this.username) {
       this.$axios
         .get(
           "/user/?username=" +
-            this.username
+          this.username
         )
         .then(response => {
           this.form.number = response.data[0].number;
@@ -188,6 +189,7 @@ export default {
   margin: 200px;
   padding: 200px;
 }
+
 .el-table .warning-row {
   background: #fff9f9;
 }

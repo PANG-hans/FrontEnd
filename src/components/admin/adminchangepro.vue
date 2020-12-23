@@ -1,5 +1,6 @@
 <template>
   <el-row>
+<!--
     <el-input placeholder="输入Title或Tag来筛选..."
               v-model="searchpro"
               @keyup.native.enter="searchtitle"
@@ -13,6 +14,7 @@
                    :page-size="20"
                    :total="totalproblem"
                    layout="total,prev, pager, next, jumper"></el-pagination>
+-->
 
     <el-table :data="gridData">
       <el-table-column property="problem"
@@ -51,10 +53,19 @@
     <el-dialog title="Chart"
                :visible.sync="dialogTableVisible"
                width="85%">
-      <div> 题目编号</div>
+      <div> 题目编号 {{ this.publicProblemId }}</div>
       <div id="statuechart" style="width: 600px;height:400px;"></div>
+      <div>
+        <center>Commit Status</center>
+      </div>
       <div id="timechart" style="width: 600px;height:400px;"></div>
+      <div>
+        <center>Time Costs of Commit</center>
+      </div>
       <div id="memoryChart" style="width: 600px;height:400px;"></div>
+      <div>
+        <center>Memory Costs of Commit</center>
+      </div>
       <!--      <el-form ref="problemform"-->
       <!--               :model="problemform"-->
       <!--               label-position="right"-->
@@ -222,7 +233,8 @@ export default {
         level: 3,
         score: 100
       },
-      searchpro: ""
+      searchpro: "",
+      publicProblemId: 1
     };
   },
   methods: {
@@ -268,7 +280,9 @@ export default {
       this.changeproblid = row.problem;
       this.problemform.problem = row.problem;
       this.dialogTableVisible = true;
+      this.publicProblemId = row.problem;
       this.problemchange(row.problem);
+
     },
     myupload(f) {
       let param = new FormData(); //创建form对象

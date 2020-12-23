@@ -8,6 +8,7 @@
                    inactive-text="All"
                    @change="statuechange"></el-switch> -->
         <el-pagination :current-page="currentpage"
+                       v-if= 'false'
                        :page-size="pagesize"
                        :page-sizes="[15, 20, 30, 50]"
                        :total="totalproblem"
@@ -57,6 +58,7 @@
         <center>
           <el-pagination :current-page="currentpage"
                          :page-size="pagesize"
+                         v-if= 'false'
                          :page-sizes="[15, 20, 30, 50]"
                          :total="totalproblem"
                          layout="total, sizes, prev, pager, next, jumper"

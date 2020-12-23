@@ -14,14 +14,12 @@
           </el-row>
           <el-row :gutter="18"
                   id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                 v-html="input"></div>
+            <!--            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"-->
+            <!--                 v-html="input"></div>-->
             <div>
-              <!--              <VueMarkdown style="margin-right:50px;word-break:break-all;white-space:pre-line;"-->
-              <!--                           v-html="detail_markdown">-->
-              <!--              </VueMarkdown>-->
+              <VueMarkdown :source="detail_markdown"></VueMarkdown>
             </div>
-            153654
+
           </el-row>
           <br>
         </el-card>
@@ -137,6 +135,7 @@
 </style>
 <script>
 import moment from "moment";
+import VueMarkdown from "vue-markdown";
 import {codemirror} from "vue-codemirror";
 import statusmini from "@/components/utils/statusmini";
 import languageselect from "@/components/utils/languageselect";
@@ -153,7 +152,8 @@ export default {
     codemirror,
     statusmini,
     prostatistice,
-    languageselect
+    languageselect,
+    VueMarkdown
   },
   data() {
     return {
@@ -186,6 +186,7 @@ export default {
       level: "Easy",
       code: "",
       language: "CHOICE!",
+      commitLanguageTypeInt: 0,
       codetemplate: {'MySQL': '', 'SQLite': '', 'PostgreSQL': ''},
       ac: 100,
       mle: 100,
@@ -195,7 +196,8 @@ export default {
       submitbuttontext: "提交后请勿重复刷新/支持将文件拖入代码框",
       judgetype: "primary",
       loadingshow: false,
-      submitid: -1
+      submitid: -1,
+      detail_markdown: ""
     };
   },
   watch: {
@@ -246,7 +248,8 @@ export default {
           //this.mdfile = "#####TEST Index";//
           // this.detail_markdown = "#####TEST Index";
           console.log(response.data.description);
-          this.des = response.data.description;
+          // this.des = response.data.description;
+          this.detail_markdown = '## ' + response.data.description;
           this.input = response.data.description;
           this.output = response.data.output;
           // this.sinput = response.data.sinput.split("|#)"); //分隔符
@@ -387,6 +390,8 @@ export default {
     changetemplate(lang) {
       console.log("changetemplate");
       console.log(lang);
+      const StringToIntObject = {'MySQL': 0, 'SQLite': 1, 'PostgreSQL': 2};
+      this.commitLanguageTypeInt = StringToIntObject[lang];
       //this.$axios.post("/problems/info/{questionid}/{language}")
       const codetemplateElement = this.codetemplate[lang];
       console.log(codetemplateElement);
@@ -481,7 +486,7 @@ export default {
             username: sessionStorage.username,
             /* oj: this.oj, */
             questionId: this.ID,
-            language: 1,
+            language: this.commitLanguageTypeInt,
             commitCode: this.code,
             testOrRun: 0,
             /* message: this.oj == "LPOJ" ? "0" : (this.proid + ""),

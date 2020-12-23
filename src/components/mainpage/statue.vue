@@ -1,78 +1,6 @@
 <template>
   <el-card shadow="always"
            id="card">
-    <!--    <el-dialog :visible.sync="dialogVisible"-->
-    <!--               width="80%">-->
-    <!--      <el-alert title="Program Message:"-->
-    <!--                :type="compilemsg=='编译成功！'?'success':'warning'"-->
-    <!--                :description="compilemsg"-->
-    <!--                :closable="false"-->
-    <!--                show-icon-->
-    <!--                :show-close="false"></el-alert>-->
-    <!--      <el-alert title="Code："-->
-    <!--                type="info"-->
-    <!--                :closable="false">-->
-    <!--        <el-button size="mini"-->
-    <!--                   v-clipboard:copy="code"-->
-    <!--                   v-clipboard:success="onCopy"-->
-    <!--                   v-clipboard:error="onError">Copy-->
-    <!--        </el-button>-->
-    <!--        &lt;!&ndash; <el-button size="mini"-->
-    <!--                   @click="downloadFile(curid,code)">Download</el-button> &ndash;&gt;-->
-    <!--        <el-button v-if="isadmin"-->
-    <!--                   type="danger"-->
-    <!--                   size="mini"-->
-    <!--                   @click="deletestatus(curid)">Delete-->
-    <!--        </el-button>-->
-    <!--      </el-alert>-->
-
-    <!--      <codemirror id="mycode"-->
-    <!--                  v-model="code"-->
-    <!--                  :options="cmOptions"></codemirror>-->
-    <!--      <el-collapse>-->
-    <!--        <el-collapse-item :key="index"-->
-    <!--                          v-for="(data,index) in dialogdata"-->
-    <!--                          v-if="data.casedata!=''"-->
-    <!--                          :class="data.caseresult=='Accepted'?'el-collapse-success':(data.caseresult=='Wrong Answer'?'el-collapse-error':'el-collapse-warning')">-->
-    <!--          <template slot="title">-->
-    <!--            <el-alert :show-icon="true"-->
-    <!--                      :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"-->
-    <!--                      :closable="false"-->
-    <!--                      v-show="data.casedata!=''">-->
-    <!--              <template slot="title">-->
-    <!--                <b>{{ ' ' + data.caseresult + ' on test ' + data.casetitle }}</b>-->
-    <!--              </template>-->
-    <!--            </el-alert>-->
-    <!--          </template>-->
-    <!--          <el-alert :title="''"-->
-    <!--                    :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"-->
-    <!--                    :closable="false"-->
-    <!--                    v-show="data.casedata!=''">-->
-    <!--            <h5 style="white-space:pre;margin-left:15px;"-->
-    <!--                v-if="data.casedata!=''">-->
-    <!--              {{ 'Time: ' + data.casetime + 'MS' + ' Memory: ' + data.casememory + 'MB' }}</h5>-->
-    <!--            <h5 style="white-space:pre;margin-left:15px;"-->
-    <!--                v-if="data.casedata!=''">Test Input:</h5>-->
-    <!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
-    <!--                 v-if="data.casedata!=''">{{ data.casedata + '\n' }}-->
-    <!--            </div>-->
-
-    <!--            <h5 style="white-space:pre;margin-left:15px;"-->
-    <!--                v-if="data.casedata!=''">Your Output:</h5>-->
-    <!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
-    <!--                 v-if="data.casedata!=''">{{ data.caseuseroutput + '\n' }}-->
-    <!--            </div>-->
-
-    <!--            <h5 style="white-space:pre;margin-left:15px;"-->
-    <!--                v-if="data.casedata!=''">Expected Output:</h5>-->
-    <!--            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"-->
-    <!--                 v-if="data.casedata!=''">{{ data.caseoutputdata + '\n' }}-->
-    <!--            </div>-->
-    <!--          </el-alert>-->
-    <!--        </el-collapse-item>-->
-    <!--      </el-collapse>-->
-    <!--    </el-dialog>-->
-
     <el-dialog :visible.sync="searchdialogVisible">
       <el-form :model="searchform"
                label-position="right"
@@ -142,11 +70,11 @@
       </div>
     </el-dialog>
 
-    <el-switch style="float: right;margin:10px;"
+<!--    <el-switch style="float: right;margin:10px;"
                v-model="showall"
                active-text="Show Mine"
                inactive-text="Show All"
-               @change="statuechange"></el-switch>
+               @change="statuechange"></el-switch>-->
     <el-button type="primary"
                @click="resetsearch"
                style="float: right;margin-top:6px;margin-right:10px;"
@@ -157,14 +85,14 @@
                style="float: right;margin-top:6px;margin-right:15px;"
                size="mini">Filter
     </el-button>
-
+<!--
     <el-pagination @size-change="handleSizeChange"
                    @current-change="handleCurrentChange"
                    :current-page="currentpage"
                    :page-sizes="[10, 20, 30, 50]"
                    :page-size="pagesize"
                    layout="total, sizes, prev, pager, next, jumper"
-                   :total="totalstatus"></el-pagination>
+                   :total="totalstatus"></el-pagination>-->
 
     <el-table :default-sort="{prop: 'id', order: 'descending'}"
               :data="tableData"
@@ -217,7 +145,7 @@
       <!--<el-table-column prop="judger"
                        label="Judger"></el-table-column>-->
     </el-table>
-    <center>
+<!--    <center>
       <el-pagination @size-change="handleSizeChange"
                      @current-change="handleCurrentChange"
                      :current-page="currentpage"
@@ -225,7 +153,7 @@
                      :page-size="pagesize"
                      layout="total, sizes, prev, pager, next, jumper"
                      :total="totalstatus"></el-pagination>
-    </center>
+    </center>-->
   </el-card>
 </template>
 
@@ -264,15 +192,14 @@
 </style>
 
 <script>
-import moment from "moment";
 import {codemirror} from "vue-codemirror";
 import "codemirror/addon/scroll/simplescrollbars.js"
+import languageselect from "@/components/utils/languageselect";
 
 require("codemirror/addon/scroll/simplescrollbars.css")
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
-import languageselect from "@/components/utils/languageselect";
 
 export default {
   name: "statue",
@@ -493,10 +420,12 @@ export default {
       this.$axios
         .get(url)
         .then(response => {
-          for (var i = 0; i < response.data.length; i++) {
+          console.log(response);
+          console.log("statue.vue");
+          for (let i = 0; i < response.data.length; i++) {
             // var testcase = response.data.results[i]["testcase"];
             response.data[i]["time"] += "MS";
-            response.data[i]["memory"] += "MB";
+            response.data[i]["memory"] += "kB";
             response.data[i]["length"] += "B";
             // response.data.results[i]["submittime"] = moment(
             //   response.data.results[i]["submittime"]

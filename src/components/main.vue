@@ -1,22 +1,20 @@
 <template>
   <el-row :gutter="12">
-    <el-col :span="6">
-      <el-row :gutter="10">
-        <welcomemessage></welcomemessage>
-      </el-row>
-      <el-row :gutter="10">
-        <acrank></acrank>
-      </el-row>
-      <el-row :gutter="10">
-        <topuser></topuser>
-      </el-row>
-      <!--<el-row :gutter="10">
-        <ojmessage></ojmessage>
-      </el-row>-->
-      <!--<el-row :gutter="10">
-        <cfrate></cfrate>
-      </el-row>-->
-    </el-col>
+
+    <!--      <el-row :gutter="10">-->
+    <!--        <acrank></acrank>-->
+    <!--      </el-row>-->
+    <!--      <el-row :gutter="10">-->
+    <!--        <topuser></topuser>-->
+    <!--      </el-row>-->
+    <!--<el-row :gutter="10">
+      <ojmessage></ojmessage>
+    </el-row>-->
+    <!--<el-row :gutter="10">
+      <cfrate></cfrate>
+    </el-row>-->
+
+
     <el-col :span="18">
       <!--<soulrow></soulrow>-->
 
@@ -33,10 +31,14 @@
           </el-tab-pane>
         </el-tabs>
       </el-row>
-
       <!-- <el-row>
          <contestmini></contestmini>
        </el-row>-->
+    </el-col>
+    <el-col :span="6">
+      <el-row :gutter="10">
+        <welcomemessage></welcomemessage>
+      </el-row>
     </el-col>
   </el-row>
 </template>
