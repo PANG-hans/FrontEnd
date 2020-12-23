@@ -531,36 +531,28 @@ export default {
             //   response.data.results[i]["result"] = "Waiting";
             // }
             //
-            // if (response.data.results[i]["result"] == "0")
-            //   response.data.results[i]["result"] = "Accepted";
-            //
-            // if (response.data.results[i]["result"] == "1") {
-            //   response.data.results[i]["result"] =
-            //     "Time Limit Exceeded on test " + testcase;
-            //   if (testcase == "?")
-            //     response.data.results[i]["result"] = "Time Limit Exceeded";
-            // }
-            //
-            // if (response.data.results[i]["result"] == "2") {
-            //   response.data.results[i]["result"] =
-            //     "Time Limit Exceeded on test " + testcase;
-            //   if (testcase == "?")
-            //     response.data.results[i]["result"] = "Time Limit Exceeded";
-            // }
-            //
-            // if (response.data.results[i]["result"] == "3") {
-            //   response.data.results[i]["result"] =
-            //     "Memory Limit Exceeded on test " + testcase;
-            //   if (testcase == "?")
-            //     response.data.results[i]["result"] = "Memory Limit Exceeded";
-            // }
-            //
-            // if (response.data.results[i]["result"] == "4") {
-            //   response.data.results[i]["result"] =
-            //     "Runtime Error on test " + testcase;
-            //   if (testcase == "?")
-            //     response.data.results[i]["result"] = "Runtime Error";
-            // }
+            console.log(response.data[i])
+            console.log(response.data[i]["result"])
+            if (response.data[i]["result"] === "0") {
+              response.data[i]["result"] = "AC";
+            }
+
+
+            if (response.data[i]["result"] === "1") {
+              response.data[i]["result"] = "WA";
+            }
+
+            if (response.data[i]["result"] === "2") {
+              response.data[i]["result"] = "TLE";
+            }
+
+            if (response.data[i]["result"] === "3") {
+              response.data[i]["result"] = "MLE";
+            }
+
+            if (response.data[i]["result"] === "4") {
+              response.data[i]["result"] = "RE";
+            }
             //
             // if (response.data.results[i]["result"] == "5")
             //   response.data.results[i]["result"] = "System Error";
