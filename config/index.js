@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://localhost:8888',
+        target: 'https://www.lpoj.cn/api',
         changeOrigin: true,
         pathRewrite: {
            '^/api': '/'

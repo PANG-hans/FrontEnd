@@ -3,32 +3,7 @@
     <!--<h3><a style="text-decoration: none;color:#67C23A;" target="_blank"
            href="https://docs.lpoj.cn/doc/oj.html#%E7%AE%A1%E7%90%86%E5%91%98%E9%A1%B5%E9%9D%A2%E8%AF%B4%E6%98%8E">具体使用，点我看管理员文档</a>
     </h3>-->
-    <el-upload
-      style="width:400px;"
-      ref="upload"
-      :action="desaddress"
-      :on-exceed="handleExceed"
-      :on-change="handleChange"
-      :on-success="handleSuccessNone"
-      :on-error="handleError"
-      :on-remove="handleRemove"
-      :file-list="fileList"
-      :multiple="false"
-      :limit="1"
-      :auto-upload="false"
-      :http-request="myupload"
-    >
-
-      <el-button slot="trigger" size="small" type="primary">选取描述文件</el-button>
-    </el-upload>
-    <div>
-      请上传包含描述文件的.md文件
-    </div>
-  <br>
-
-    <el-form-item label="题目编号：">
-      <el-input v-model="addproblemform.problem" style="width:400px;" readonly></el-input>
-    </el-form-item>
+    <el-form-item label="题目标题:"><input v-model="addproblemform.description"></input></el-form-item>
     <el-form-item label="时间（ms）：">
       <el-input-number
         style="width:200px;"
@@ -47,40 +22,32 @@
         :max="1024"
       ></el-input-number>
     </el-form-item>
-    <el-form-item label="标签（用|分割）：">
-      <el-input v-model="addproblemform.tag" style="width:400px;"></el-input>
-    </el-form-item>
-    <el-form-item label="状态：">
-      <el-select v-model="addproblemform.auth" placeholder="请选择" style="width:200px;">
-        <el-option key="1" label="开放" :value="1"></el-option>
-        <el-option key="2" label="未开放" :value="2"></el-option>
-      </el-select>
-    </el-form-item>
-    <el-upload
-      style="width:400px;"
-      ref="upload"
-      :action="dataaddress"
-      :on-exceed="handleExceed"
-      :on-change="handleChange"
-      :on-success="handleSuccessNone"
-      :on-error="handleError"
-      :on-remove="handleRemove"
-      :file-list="fileList"
-      :multiple="false"
-      :limit="1"
-      :auto-upload="false"
-      :http-request="myupload"
-    >
-
-      <el-button slot="trigger" size="small" type="primary">选取数据文件</el-button>
-      <div
-        slot="tip"
-        class="el-upload__tip"
+    <el-form-item label="上传描述文件">
+      <el-upload
+        style="width:400px;"
+        ref="upload"
+        :action="desaddress"
+        :multiple="true"
+        :limit="1"
+        :auto-upload="true"
+        :http-request="uploaddatafile"
       >
-        只能上传zip/jpg文件【注意是小写字母后缀】,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件（utf-8编码）可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如：
-        case1|这是case1的说明
-      </div>
-    </el-upload>
+        <el-button @click="">选择文件</el-button>
+      </el-upload>
+    </el-form-item>
+    <el-form-item label="上传数据文件">
+      <el-upload
+        style="width:400px;"
+        ref="upload"
+        :action="dataaddress"
+        :multiple="true"
+        :limit="1"
+        :auto-upload="true"
+        :http-request="uploaddatafile"
+      >
+        <el-button @click="">选择文件</el-button>
+      </el-upload>
+    </el-form-item>
     <el-button type="success" @click="onAddProblemSubmit" style="float:right;">添加题目</el-button>
   </el-form>
 </template>
@@ -97,81 +64,43 @@ export default {
       loading: false,
 
       addproblemform: {
-        problem: this.problemcount + 1,
-        /*author: sessionStorage.name,
-        title: "题目标题",
-        des: "题目说明\n支持HTML格式和Katex公式\n\n，不能为空",
-        input: "输入说明\n支持HTML格式和Katex公式\n\n，不能为空",
-        output: "输出说明\n支持HTML格式和Katex公式\n\n，不能为空",
-        sinput: "1 1|#)2 2",
-        soutput: "2|#)4",
-        source: "LPOJ",*/
+        description: "",
         time: 1000,
         memory: 64,
-       /* hint: "提示\n支持HTML格式和Katex公式\n\n，不能为空",
-        auth: 2,
-        tag: "简单题|模拟",
-        template:
-          "*****C++*****\n\n*****C*****\n\n*****Python2*****\n\n*****Python3*****\n\n*****Java*****\n\n*****Swift5.1*****\n\n",
-        */level: 3,
-        /*score: 100,
-        oj: "LPOJ",
-        isspj: false,
-        istemp: false*/
+
       },
-      addproblemdataform: {
-        problem: this.problemcount + 1,
-        title: "题目标题",
-        tag: "简单题|模拟|贪心",
-        level: 3,
-        /*score: 100,
-        auth: 2,
-        oj: ""*/
-      }
     };
   },
   methods: {
-    myupload(f) {//需要修改上传方式
+    uploaddescriptionfile(f) {//需要修改上传方式
       let param = new FormData(); //创建form对象
-      var tail = f.file.name.split(".");
+      param.append("file", f); //通过append向form对象添加数据
+      console.log("des" + f);
+      this.$axios.post('/api/up/file',fd).then(function(res){
+        alert('成功');
+      })
 
-      if (tail[1] == "zip") {
-        var newfile = new File([f.file], this.addproblemform.problem + ".zip");
-      } else if (tail[1] == "jpg") {
-        var newfile = new File([f.file], this.addproblemform.problem + ".jpg");
-      }
-
-      param.append("file", newfile); //通过append向form对象添加数据
       let config = {
         headers: {"Content-Type": "multipart/form-data"}
-      }; //添加请求头
-      /*this.$axios
-        .post(f.action, param, config) //上传图片
-        .then(response => {
-          console.log(response.data);
-          f.onSuccess(response.data);
-        })
-        .catch(err => {
-          console.log(err);
-          f.onError(err);
-        });*/
+      };
     },
-    handleRemove(file, fileList) {
-      this.fileList = [];
+    uploaddatafile(f) {//需要修改上传方式
+      let param = new FormData(); //创建form对象
+      param.append("file", f); //通过append向form对象添加数据
+      console.log("data" + f);
+      let config = {
+        headers: {"Content-Type": "multipart/form-data"}
+      };
     },
-    handleExceed(file, fileList) {
-      this.$message.error(
-        "一次至多只能上传一个文件（ZIP数据文件与图片文件分开上传）！"
-      );
-    },
+
     handleChange(file, fileList) {
+      console.log(file);
+      console.log(fileList);
+
       var name = file.name;
       var li = name.split(".");
       this.fileList = fileList;
-      if (li[1] != "zip" && li[1] != "jpg") {
-        this.$message.error("数据文件名名不正确！后缀应为zip/jpeg/jpg");
-        this.fileList = [];
-      }
+
     },
     handleError(response, file, fileList) {
       this.$message.error("数据上传失败！" + response);
@@ -182,53 +111,10 @@ export default {
       this.$router.go(0);
     },
     async handleSuccess(response, file, fileList) {
-      /*if (this.addproblemform.isspj == true) {
-        this.addproblemform.hint =
-          this.addproblemform.hint +
-          "\n <b>【本题为Special Judge，即答案可能有多种情况】</b>";
-      }*/
-
-      try {
-        var response = await this.$axios.post("/commit/creat", this.addproblemform); //提交
-      } catch (error) {
-        this.$message.error(error);
-        return false;
-      }
-      this.addproblemdataform.problem = this.addproblemform.problem;
-      this.addproblemdataform.title = this.addproblemform.title;
-      this.addproblemdataform.level = this.addproblemform.level;
-      this.addproblemdataform.tag = this.addproblemform.tag;
-      /*this.addproblemdataform.score = this.addproblemform.score;
-      this.addproblemdataform.auth = this.addproblemform.auth;
-      this.addproblemdataform.oj = this.addproblemform.oj;*/
-
-      var tag = this.addproblemdataform.tag.split("|");
-
-      try {
-        for (var i = 0; i < tag.length; i++) {
-          await this.$axios.post("/problemtag/", {
-            tagname: tag[i],
-            count: 1
-          });
-        }
-      } catch (error) {
-        ;
-      }
-
-      try {
-        var response2 = await this.$axios.post(
-          "/problemdata/",
-          this.addproblemdataform
-        );
-
-        this.$message({
-          message: "提交成功！题目编号为：" + response2.data.problem,
-          type: "success"
-        });
-      } catch (error) {
-        this.$message.error(error);
-        return false;
-      }
+      this.$message({
+        message: "提交成功！题目编号为：" + response.data.problem,
+        type: "success"
+      });
       console.log("aaaaaaaaaaaaaaaaa")
       return true;
     },
@@ -236,7 +122,7 @@ export default {
     onAddProblemSubmit() {
       if (this.fileList.length <= 0) {
         this.$confirm(
-          "确定添加吗？本次添加没有添加任何文件！后续可在修改题目中添加",
+          "确定添加吗？本次添加没有添加任何文件！不可更新题目信息！",
           "添加题目",
           {
             confirmButtonText: "确定",
@@ -276,18 +162,6 @@ export default {
     }
   },
   created() {
-    this.$axios
-      .get("/problemdata/?limit=1")
-      .then(response => {
-        this.problemcount = response.data.count;
-        this.addproblemform.problem = this.problemcount + 1;
-        this.addproblemdataform.problem = this.problemcount + 1;
-      })
-      .catch(error => {
-        this.$message.error(
-          "服务器出错！" + JSON.stringify(error.response.data)
-        );
-      });
   }
 };
 </script>
