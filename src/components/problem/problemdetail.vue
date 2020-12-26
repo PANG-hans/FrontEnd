@@ -249,7 +249,7 @@ export default {
           // this.detail_markdown = "#####TEST Index";
           console.log(response.data.description);
           // this.des = response.data.description;
-          this.detail_markdown = '## ' + response.data.description;
+          this.detail_markdown = response.data.description;
           this.input = response.data.description;
           this.output = response.data.output;
           // this.sinput = response.data.sinput.split("|#)"); //分隔符

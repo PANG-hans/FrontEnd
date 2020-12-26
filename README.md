@@ -1,37 +1,51 @@
 # 前端部署
 
+## 开发部署
+
+``` bash
+cd Frontend
+npm install # maybe can use cnpm
+npm run dev # and use port 8080 as default
+```
 ## Docker部署
 非专业用户不推荐使用Docker单独部署
 修改nginx.conf中proxy_pass的地址为你的后端地址，如有需要，可以修改其他配置
 
-```
+``` bash
 docker build -t lpojfrontend .
 docker run -d -p 80:80 lpojfrontend
 ```
 
 ## 一般部署
 
-```
+``` bash
 cd Frontend
 npm install
 npm run build
 ```
+
 编译完毕后，网站文件保存在dist目录中，接下来部署到服务器中
-+ 推荐使用Nginx
-```
+
++ 部署推荐使用Nginx
+
+```bash
 sudo apt-get install nginx
 ```
+
 将dist文件夹中的文件复制到Web服务器目录中（默认根目录 **/var/www/html/**）
 接下来修改Nginx配置文件（不同版本可能在不同的地方）
-```
+
+```bash
 sudo nano /etc/nginx/nginx.conf
 ```
+
 主要修改如下几个配置
 1. 路由重定向
 2. API重定向
 
 将如下配置复制到http{}中
-```
+
+``` bash
 server{
     listen 80;
     server_name www.lpoj.cn;  # 此处填写你的域名或IP地址
